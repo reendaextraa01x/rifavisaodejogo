@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Sparkles, Loader } from 'lucide-react';
@@ -21,6 +21,7 @@ interface SlothAnalysisProps {
 export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [luckyNumber, setLuckyNumber] = useState<number | null>(null);
+    const [probability, setProbability] = useState<number | null>(null);
 
     const availableNumbers = useMemo(() => {
         const soldNumbers = new Set(tickets.filter(t => t.isSold).map(t => t.ticketNumber));
@@ -30,11 +31,15 @@ export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
     const handleAnalyze = () => {
         setIsAnalyzing(true);
         setLuckyNumber(null);
+        setProbability(null);
 
         setTimeout(() => {
             if (availableNumbers.length > 0) {
                 const randomIndex = Math.floor(Math.random() * availableNumbers.length);
                 setLuckyNumber(availableNumbers[randomIndex]);
+                // Generate a random probability between 40 and 60
+                const randomProb = Math.floor(Math.random() * (60 - 40 + 1)) + 40;
+                setProbability(randomProb);
             }
             setIsAnalyzing(false);
         }, 3000); // Simulate analysis for 3 seconds
@@ -65,14 +70,18 @@ export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
                     <div className="flex flex-col items-center space-y-2 animate-fade-in">
                         <p className="text-white text-2xl">A preguiça recomenda o número...</p>
                         <div 
-                            className="flex items-center justify-center bg-primary text-primary-foreground font-bold w-32 h-32 rounded-full text-6xl shadow-lg border-4 border-accent"
+                            className="flex items-center justify-center bg-primary text-primary-foreground font-bold w-32 h-32 rounded-full text-6xl shadow-lg border-4 border-accent cursor-pointer transform transition-transform hover:scale-110"
                             style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
+                            onClick={handleAnalyze}
+                            title="Analisar Novamente"
                         >
                             {String(luckyNumber).padStart(3, '0')}
                         </div>
-                        <Button onClick={handleAnalyze} variant="outline" className="mt-4">
-                            Analisar Novamente
-                        </Button>
+                        {probability && (
+                             <p className="text-white text-md mt-4 animate-fade-in">
+                                Probabilidade de acerto: <span className="font-bold text-primary">{probability}%</span>
+                            </p>
+                        )}
                     </div>
                 ) : (
                     <Button onClick={handleAnalyze} disabled={isAnalyzing} size="lg">
@@ -90,6 +99,3 @@ export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
         </Card>
     );
 }
-
-
-    
