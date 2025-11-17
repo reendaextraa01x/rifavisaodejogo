@@ -54,12 +54,6 @@ export default function Home() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
 
-  // const raffleTicketsQuery = useMemoFirebase(() => {
-  //   if (!firestore) return null;
-  //   return query(collection(firestore, "raffleTickets"), where("raffleId", "==", "main-raffle"));
-  // }, [firestore]);
-
-  // const { data: tickets, isLoading: ticketsLoading } = useCollection<RaffleTicket>(raffleTicketsQuery);
   const tickets: RaffleTicket[] = useMemo(() => {
       const generatedTickets: RaffleTicket[] = [];
       for (let i = 1; i <= totalNumbers; i++) {
@@ -205,7 +199,7 @@ export default function Home() {
     <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-[#0A1A05] text-gray-100 font-body overflow-x-hidden">
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
-        <header className="flex flex-col items-center text-center space-y-4">
+        <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
           <SlothMascot className="w-48 h-auto md:w-56" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
@@ -215,15 +209,15 @@ export default function Home() {
           </p>
         </header>
 
-        <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
-          <h2 className="text-2xl font-bold mb-4">
+        <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
             Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
           </h2>
           <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
           <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
         </section>
 
-        <section className="w-full text-center">
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <h2 className="font-headline text-4xl text-center mb-6 text-white">Escolha sua sorte 🍀</h2>
             <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
               <CardContent className="space-y-4">
@@ -241,18 +235,18 @@ export default function Home() {
                       <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
                   </div>
                   <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg shadow-accent/50 w-full" onClick={handleBuyClick}>
+                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg animate-glow w-full" onClick={handleBuyClick}>
                       COMPRAR NÚMEROS
                   </Button>
               </CardContent>
             </Card>
         </section>
 
-        <section className="w-full">
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <h2 className="font-headline text-4xl text-center mb-6 text-white">Combos com Desconto 🔥</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {pricingOptions.map((option, index) => (
-                    <Card key={index} className="bg-card/50 border-primary/30 text-center hover:bg-card hover:border-primary transition-all duration-300 transform hover:-translate-y-1 shadow-lg cursor-pointer" onClick={() => setTicketQuantity(option.tickets)}>
+                    <Card key={index} className="bg-card/50 border-primary/30 text-center hover:bg-card hover:border-primary transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-primary/30 cursor-pointer" onClick={() => setTicketQuantity(option.tickets)}>
                         <CardHeader>
                             <CardTitle className="text-5xl">{option.emoji}</CardTitle>
                         </CardHeader>
@@ -266,12 +260,12 @@ export default function Home() {
         </section>
         
         {user && (
-          <section className="w-full">
+          <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
             <MyTickets userId={user.uid} />
           </section>
         )}
 
-        <section className="w-full">
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen}>
             <CollapsibleTrigger asChild>
               <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
@@ -285,12 +279,12 @@ export default function Home() {
           </Collapsible>
         </section>
 
-        <section className="w-full">
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
             <TopBuyers tickets={tickets || []} />
         </section>
 
 
-        <section className="w-full">
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1.4s' }}>
             <Card className="bg-card/30 border-border backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle className="font-headline text-3xl text-center text-primary">Regras e Transparência</CardTitle>
@@ -339,5 +333,4 @@ export default function Home() {
       </Dialog>
     </div>
   );
-
-    
+}
