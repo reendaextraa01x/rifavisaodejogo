@@ -63,12 +63,10 @@ export default function Home() {
 
   const { soldCount, availableCount, percentageSold, soldNumbersSet } = useMemo(() => {
     if (!tickets) {
-      const percentageToFill = 87.63;
-      const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
       return {
-        soldCount: initialSoldCount,
-        availableCount: totalNumbers - initialSoldCount,
-        percentageSold: percentageToFill,
+        soldCount: 0,
+        availableCount: totalNumbers,
+        percentageSold: 0,
         soldNumbersSet: new Set(),
       };
     }
@@ -407,5 +405,3 @@ export default function Home() {
       </Dialog>
     </div>
   );
-
-    
