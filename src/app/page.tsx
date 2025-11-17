@@ -219,27 +219,33 @@ export default function Home() {
         </section>
 
         <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-          <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
-            <CardContent className="space-y-4 p-0">
-                <p className="text-xl font-bold">Escolha quantos números você quer:</p>
-                <div className="flex items-center justify-center space-x-4">
-                    <Button variant="outline" size="icon" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
-                    <Input 
-                      type="number" 
-                      className="text-center text-2xl font-bold w-24 h-14 bg-background/50 border-primary/50" 
-                      value={ticketQuantity}
-                      onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                      min="1"
-                      max={availableCount}
-                    />
-                    <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+            <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
+                <div className="space-y-6">
+                    <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
+                    <div className="flex items-center justify-center space-x-2">
+                        <Button variant="outline" size="icon" className="h-14 w-14 rounded-full text-2xl" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
+                        <Input 
+                          type="number" 
+                          className="text-center text-4xl font-bold w-32 h-20 bg-background/70 border-2 border-primary/50 rounded-xl" 
+                          value={ticketQuantity}
+                          onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                          min="1"
+                          max={availableCount}
+                        />
+                        <Button variant="outline" size="icon" className="h-14 w-14 rounded-full text-2xl" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+                    </div>
+                    <p className="text-5xl font-headline text-primary tracking-widest">
+                      Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}
+                    </p>
+                    <Button 
+                      size="lg" 
+                      className="bg-gradient-to-r from-green-500 to-lime-400 hover:from-green-600 hover:to-lime-500 text-black font-bold text-2xl py-8 px-10 rounded-full shadow-lg w-full transform transition-transform hover:scale-105"
+                      onClick={handleBuyClick}
+                    >
+                        COMPRAR AGORA
+                    </Button>
                 </div>
-                <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
-                <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white font-bold text-xl py-8 px-10 rounded-full shadow-lg w-full animate-glow" style={{"--primary": "90 60% 50%"} as React.CSSProperties} onClick={handleBuyClick}>
-                    COMPRAR {ticketQuantity} NÚMERO{ticketQuantity > 1 ? 'S' : ''}
-                </Button>
-            </CardContent>
-          </Card>
+            </div>
         </section>
         
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
@@ -311,5 +317,7 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
 
     
