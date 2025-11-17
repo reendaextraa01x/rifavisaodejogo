@@ -1,0 +1,256 @@
+{
+  "entities": {
+    "Raffle": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Raffle",
+      "type": "object",
+      "description": "Represents a raffle event with its associated details.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Raffle entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the raffle event."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the raffle event."
+        },
+        "prizeDescription": {
+          "type": "string",
+          "description": "Description of the prize being raffled."
+        },
+        "ticketPrice": {
+          "type": "number",
+          "description": "The price of a single raffle ticket."
+        },
+        "totalTickets": {
+          "type": "number",
+          "description": "The total number of tickets available for the raffle."
+        },
+        "availableTickets": {
+          "type": "number",
+          "description": "The number of tickets still available for purchase."
+        },
+        "raffleEndDate": {
+          "type": "string",
+          "description": "The date and time when the raffle ends.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "prizeDescription",
+        "ticketPrice",
+        "totalTickets",
+        "availableTickets",
+        "raffleEndDate"
+      ]
+    },
+    "Purchase": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Purchase",
+      "type": "object",
+      "description": "Represents a purchase of raffle tickets.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Purchase entity."
+        },
+        "raffleId": {
+          "type": "string",
+          "description": "Reference to Raffle. (Relationship: Raffle 1:N Purchase)"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Purchase)"
+        },
+        "purchaseDate": {
+          "type": "string",
+          "description": "The date and time when the purchase was made.",
+          "format": "date-time"
+        },
+        "numberOfTickets": {
+          "type": "number",
+          "description": "The number of tickets purchased in this transaction."
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "The total amount paid for the purchase."
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "The method of payment used for the purchase (e.g., credit card, Pix)."
+        },
+        "paymentStatus": {
+          "type": "string",
+          "description": "The status of the payment (e.g., pending, completed, failed)."
+        }
+      },
+      "required": [
+        "id",
+        "raffleId",
+        "userId",
+        "purchaseDate",
+        "numberOfTickets",
+        "totalAmount",
+        "paymentMethod",
+        "paymentStatus"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user participating in the raffle.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "username": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user.",
+          "format": "email"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The phone number of the user."
+        },
+        "registrationDate": {
+          "type": "string",
+          "description": "The date and time when the user registered.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email",
+        "phoneNumber",
+        "registrationDate"
+      ]
+    },
+    "RaffleTicket": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "RaffleTicket",
+      "type": "object",
+      "description": "Represents a specific ticket in a raffle and its purchase status.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the RaffleTicket entity."
+        },
+        "raffleId": {
+          "type": "string",
+          "description": "Reference to Raffle. (Relationship: Raffle 1:N RaffleTicket)"
+        },
+        "ticketNumber": {
+          "type": "number",
+          "description": "The unique number assigned to this raffle ticket."
+        },
+        "isSold": {
+          "type": "boolean",
+          "description": "Indicates whether the ticket has been sold or is still available."
+        },
+        "purchaseId": {
+          "type": "string",
+          "description": "Reference to Purchase. (Relationship: Purchase 1:N RaffleTicket).  Null if the ticket is not sold."
+        }
+      },
+      "required": [
+        "id",
+        "raffleId",
+        "ticketNumber",
+        "isSold"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/raffles/{raffleId}",
+        "definition": {
+          "entityName": "Raffle",
+          "schema": {
+            "$ref": "#/backend/entities/Raffle"
+          },
+          "description": "Stores raffle event details.  'raffleId' is the unique identifier for each raffle.",
+          "params": [
+            {
+              "name": "raffleId",
+              "description": "Unique identifier for the raffle."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. 'userId' corresponds to the Firebase Auth UID.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The Firebase Auth UID of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/purchases/{purchaseId}",
+        "definition": {
+          "entityName": "Purchase",
+          "schema": {
+            "$ref": "#/backend/entities/Purchase"
+          },
+          "description": "Stores user purchase information. 'userId' corresponds to the Firebase Auth UID. 'purchaseId' is the unique ID of the purchase. This models the `User 1:N Purchase` relationship.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The Firebase Auth UID of the user."
+            },
+            {
+              "name": "purchaseId",
+              "description": "Unique identifier for the purchase."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/raffleTickets/{raffleTicketId}",
+        "definition": {
+          "entityName": "RaffleTicket",
+          "schema": {
+            "$ref": "#/backend/entities/RaffleTicket"
+          },
+          "description": "Stores individual raffle ticket data. 'raffleTicketId' is the unique identifier for the Raffle Ticket.",
+          "params": [
+            {
+              "name": "raffleTicketId",
+              "description": "Unique identifier for the Raffle Ticket."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support a raffle system with a focus on scalability, security, and real-time updates. It uses path-based ownership for user-specific data (purchases) and leverages denormalization to ensure authorization independence, crucial for secure and efficient security rules. The segregation of RaffleTickets into its own collection enables efficient querying and management of ticket availability. The raffle document stores data about each raffle. Purchases are stored as subcollections of the users, to enable easier querying of a user's purchase history. Each RaffleTicket document stores the association to the raffle and optionally the purchase, if sold. This allows for efficient tracking of tickets. Since the application requires displaying available vs sold tickets, this design supports performant `list` operations because the data is not filtered based on user roles, but rather on public availability."
+  }
+}
