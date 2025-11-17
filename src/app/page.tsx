@@ -24,9 +24,9 @@ import { useAuth, useCollection, useFirestore, useMemoFirebase } from "@/firebas
 import { collection, query, where, getDocs, writeBatch, doc } from "firebase/firestore";
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useUser } from "@/firebase/provider";
-import { TopBuyers } from "@/components/raffle/top-buyers";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
+import { RecentPurchases } from "@/components/raffle/recent-purchases";
 
 type RaffleTicket = {
   id: string;
@@ -279,7 +279,7 @@ export default function Home() {
         </section>
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
-            <TopBuyers tickets={tickets || []} />
+            <RecentPurchases tickets={tickets || []} />
         </section>
 
 
@@ -302,7 +302,8 @@ export default function Home() {
 
       <footer className="w-full text-center py-8 mt-12 border-t border-border">
           <p className="font-bold text-lg">@visao.de.jogo.oficial</p>
-          <p className="text-muted-foreground text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>      </footer>
+          <p className="text-muted-foreground text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>
+      </footer>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
           <DialogContent className="bg-gray-900 border-primary/50 text-white">
@@ -332,5 +333,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
