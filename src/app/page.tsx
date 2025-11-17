@@ -223,16 +223,16 @@ export default function Home() {
                 <div className="space-y-6">
                     <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
                     <div className="flex items-center justify-center space-x-2">
-                        <Button variant="outline" size="icon" className="h-14 w-14 rounded-full text-2xl" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
+                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full text-xl" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
                         <Input 
                           type="number" 
-                          className="text-center text-4xl font-bold w-32 h-20 bg-background/70 border-2 border-primary/50 rounded-xl" 
+                          className="text-center text-6xl font-bold w-40 h-24 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0" 
                           value={ticketQuantity}
                           onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                           min="1"
                           max={availableCount}
                         />
-                        <Button variant="outline" size="icon" className="h-14 w-14 rounded-full text-2xl" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full text-xl" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
                     </div>
                     <p className="text-5xl font-headline text-primary tracking-widest">
                       Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}
@@ -317,6 +317,8 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
 
     
 
