@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck } from "lucide-react";
+import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
 import {
@@ -62,7 +62,6 @@ export default function Home() {
 
   const { soldCount, availableCount, percentageSold } = useMemo(() => {
     if (!tickets) {
-      // Mocked data for initial load impression
       const percentageToFill = 87.63;
       const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
       return {
@@ -192,6 +191,25 @@ export default function Home() {
     { icon: <Handshake className="text-primary" />, text: "Garantimos a entrega do prêmio em até 24h após o sorteio. Transparência total!" },
     { icon: <Gift className="text-primary" />, text: "A camisa será enviada para o endereço do ganhador sem custos de frete." },
   ];
+  
+  const combos = [
+    {
+      quantity: 1,
+      price: 10,
+      text: "Azarão",
+    },
+    {
+      quantity: 3,
+      price: 25,
+      text: "Apostador",
+      popular: true,
+    },
+    {
+      quantity: 7,
+      price: 50,
+      text: "Investidor",
+    },
+  ];
 
   return (
     <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-green-950 to-background text-gray-100 font-body overflow-x-hidden">
@@ -219,32 +237,7 @@ export default function Home() {
           <BonusNumber tickets={tickets || []} />
         </section>
 
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <h2 className="font-headline text-4xl text-center mb-6 text-white">Escolha sua sorte 🍀</h2>
-            <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
-              <CardContent className="space-y-4">
-                  <p className="text-xl font-bold">Quantos números você quer comprar?</p>
-                  <div className="flex items-center justify-center space-x-4">
-                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
-                      <Input 
-                        type="number" 
-                        className="text-center text-2xl font-bold w-24 h-14" 
-                        value={ticketQuantity}
-                        onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                        min="1"
-                        max={availableCount}
-                      />
-                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
-                  </div>
-                  <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg animate-glow w-full" onClick={handleBuyClick}>
-                      COMPRAR NÚMEROS
-                  </Button>
-              </CardContent>
-            </Card>
-        </section>
-
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
               <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
@@ -257,38 +250,62 @@ export default function Home() {
             </CollapsibleContent>
           </Collapsible>
         </section>
+        
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <h2 className="font-headline text-4xl text-center mb-6 text-white">Aumente suas chances! 🍀</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {combos.map((combo) => (
+                <Card
+                  key={combo.quantity}
+                  className={`bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 cursor-pointer hover:scale-105 hover:shadow-primary/50 group ${combo.popular ? 'border-2 border-primary animate-glow' : ''}`}
+                  onClick={() => setTicketQuantity(combo.quantity)}
+                >
+                  {combo.popular && (
+                    <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs font-bold py-1 px-3 rounded-full uppercase tracking-wider">
+                      Popular
+                    </div>
+                  )}
+                  <CardHeader className="p-0 mb-4">
+                    <CardTitle className="font-headline text-2xl text-primary">{combo.text}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-0 space-y-2">
+                    <p className="text-4xl font-bold">
+                      {combo.quantity} <span className="text-2xl font-headline text-muted-foreground">Número{combo.quantity > 1 ? 's' : ''}</span>
+                    </p>
+                    <p className="text-2xl font-headline text-white">
+                      R$ {combo.price.toFixed(2).replace('.', ',')}
+                    </p>
+                    <Button variant="ghost" className="w-full group-hover:bg-accent group-hover:text-accent-foreground">
+                      <CheckCircle className="mr-2 h-4 w-4" /> Selecionar
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+        </section>
 
-        <section className="w-full animate-fade-in" style={{ animationDelay: '1.0s' }}>
-          <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 animate-glow">
-            <CardHeader>
-              <CardTitle className="font-headline text-3xl text-primary flex items-center justify-center gap-2">
-                  <UserCheck className="w-8 h-8" /> Vagas Quase Esgotadas!
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center space-y-4">
-                <p className="text-lg text-muted-foreground">Muitos já garantiram seus números. Não fique de fora!</p>
-                <div className="flex -space-x-2 overflow-hidden">
-                  <Avatar>
-                    <AvatarImage src="https://i.pravatar.cc/150?img=1" alt="User 1"/>
-                    <AvatarFallback>U1</AvatarFallback>
-                  </Avatar>
-                   <Avatar>
-                    <AvatarImage src="https://i.pravatar.cc/150?img=2" alt="User 2"/>
-                    <AvatarFallback>U2</AvatarFallback>
-                  </Avatar>
-                   <Avatar>
-                    <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User 3"/>
-                    <AvatarFallback>U3</AvatarFallback>
-                  </Avatar>
-                  <Avatar>
-                    <AvatarFallback>+{soldCount > 3 ? soldCount - 3 : 0}</AvatarFallback>
-                  </Avatar>
-                </div>
-                <p className="font-bold text-white text-xl">
-                  Apenas <span className="text-primary text-2xl">{availableCount}</span> números disponíveis!
-                </p>
-            </CardContent>
-          </Card>
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '1.0s' }}>
+            <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
+              <CardContent className="space-y-4">
+                  <p className="text-xl font-bold">Ou escolha quantos números você quer:</p>
+                  <div className="flex items-center justify-center space-x-4">
+                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
+                      <Input 
+                        type="number" 
+                        className="text-center text-2xl font-bold w-24 h-14" 
+                        value={ticketQuantity}
+                        onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        min="1"
+                        max={availableCount}
+                      />
+                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+                  </div>
+                  <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 10 - (ticketQuantity >= 7 ? 20 : (ticketQuantity >= 3 ? 5 : 0))).toFixed(2).replace('.', ',')}</p>
+                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg animate-glow w-full" onClick={handleBuyClick}>
+                      COMPRAR {ticketQuantity} NÚMERO{ticketQuantity > 1 ? 'S' : ''}
+                  </Button>
+              </CardContent>
+            </Card>
         </section>
 
         {user && (
@@ -346,7 +363,3 @@ export default function Home() {
       </Dialog>
     </div>
   );
-
-    
-
-    
