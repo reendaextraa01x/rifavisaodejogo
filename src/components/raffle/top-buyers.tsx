@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Crown, Trophy } from 'lucide-react';
-import { Skeleton } from '../ui/skeleton';
 
 type RaffleTicket = {
     id: string;
@@ -57,19 +56,10 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
 
     }, [tickets]);
 
-    if (tickets.length === 0 && topBuyers.length === 0) {
-        return (
-            <Card className="bg-card/30 border-border backdrop-blur-sm shadow-lg shadow-black/20">
-                <CardHeader>
-                    <CardTitle className="font-headline text-3xl text-center text-primary flex items-center justify-center gap-2">
-                        <Trophy className="w-8 h-8" /> Top Compradores
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center text-muted-foreground">
-                    <p>Seja o primeiro a comprar e apareça aqui!</p>
-                </CardContent>
-            </Card>
-        )
+    const soldTickets = useMemo(() => tickets.filter(t => t.isSold), [tickets]);
+
+    if (soldTickets.length === 0) {
+        return null; // Don't render if no tickets have been sold yet
     }
 
     return (
@@ -80,7 +70,7 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {topBuyers.map((buyer, index) => (
+                {topBuyers.length > 0 ? topBuyers.map((buyer, index) => (
                     <div key={buyer.userId} className="flex items-center justify-between bg-card/50 p-3 rounded-lg transition-all duration-300 hover:bg-card hover:shadow-primary/20 hover:shadow-md">
                         <div className="flex items-center gap-4">
                             <span className="font-bold text-lg w-6">{index + 1}.</span>
@@ -95,13 +85,10 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
                            <span className="font-bold text-primary text-lg">{buyer.ticketCount} números</span>
                         </div>
                     </div>
-                ))}
-                 {topBuyers.length === 0 && (
-                     <p className="text-center text-muted-foreground">Ainda não há compradores. Seja o primeiro!</p>
+                )) : (
+                     <p className="text-center text-muted-foreground">Seja o primeiro a comprar e apareça aqui!</p>
                  )}
             </CardContent>
         </Card>
     );
 }
-
-    
