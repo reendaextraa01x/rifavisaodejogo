@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import {
   Query,
   onSnapshot,
+  doc,
   DocumentData,
   FirestoreError,
   QuerySnapshot,
@@ -11,19 +12,10 @@ import {
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import type { UseQueryResult } from './types'
 
 /** Utility type to add an 'id' field to a given type T. */
 export type WithId<T> = T & { id: string };
-
-/**
- * Interface for the return value of the useCollection hook.
- * @template T Type of the document data.
- */
-export interface UseCollectionResult<T> {
-  data: WithId<T>[] | null; // Document data with ID, or null.
-  isLoading: boolean;       // True if loading.
-  error: FirestoreError | Error | null; // Error object, or null.
-}
 
 /* Internal implementation of Query:
   https://github.com/firebase/firebase-js-sdk/blob/c5f08a9bc5da0d2b0207802c972d53724ccef055/packages/firestore/src/lite-api/reference.ts#L143
@@ -49,11 +41,11 @@ export interface InternalQuery extends Query<DocumentData> {
  * @template T Optional type for document data. Defaults to any.
  * @param {CollectionReference<DocumentData> | Query<DocumentData> | null | undefined} targetRefOrQuery -
  * The Firestore CollectionReference or Query. Waits if null/undefined.
- * @returns {UseCollectionResult<T>} Object with data, isLoading, error.
+ * @returns {UseQueryResult<T>} Object with data, isLoading, error.
  */
 export function useCollection<T = any>(
     memoizedTargetRefOrQuery: ((CollectionReference<DocumentData> | Query<DocumentData>) & {__memo?: boolean})  | null | undefined,
-): UseCollectionResult<T> {
+): UseQueryResult<T[]> {
   type ResultItemType = WithId<T>;
   type StateDataType = ResultItemType[] | null;
 
@@ -108,7 +100,7 @@ export function useCollection<T = any>(
     return () => unsubscribe();
   }, [memoizedTargetRefOrQuery]); // Re-run if the target query/reference changes.
   if(memoizedTargetRefOrQuery && !memoizedTargetRefOrQuery.__memo) {
-    throw new Error(memoizedTargetRefOrQuery + ' was not properly memoized using useMemoFirebase');
+    throw new Error('useCollection query must be memoized with useMemoFirebase');
   }
   return { data, isLoading, error };
 }

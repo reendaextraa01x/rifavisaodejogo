@@ -10,19 +10,10 @@ import {
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import type { UseQueryResult } from './types'
 
 /** Utility type to add an 'id' field to a given type T. */
 type WithId<T> = T & { id: string };
-
-/**
- * Interface for the return value of the useDoc hook.
- * @template T Type of the document data.
- */
-export interface UseDocResult<T> {
-  data: WithId<T> | null; // Document data with ID, or null.
-  isLoading: boolean;       // True if loading.
-  error: FirestoreError | Error | null; // Error object, or null.
-}
 
 /**
  * React hook to subscribe to a single Firestore document in real-time.
@@ -36,11 +27,11 @@ export interface UseDocResult<T> {
  * @template T Optional type for document data. Defaults to any.
  * @param {DocumentReference<DocumentData> | null | undefined} docRef -
  * The Firestore DocumentReference. Waits if null/undefined.
- * @returns {UseDocResult<T>} Object with data, isLoading, error.
+ * @returns {UseQueryResult<T>} Object with data, isLoading, error.
  */
 export function useDoc<T = any>(
-  memoizedDocRef: DocumentReference<DocumentData> | null | undefined,
-): UseDocResult<T> {
+  memoizedDocRef: (DocumentReference<DocumentData>  & {__memo?: boolean}) | null | undefined,
+): UseQueryResult<T> {
   type StateDataType = WithId<T> | null;
 
   const [data, setData] = useState<StateDataType>(null);
@@ -88,6 +79,10 @@ export function useDoc<T = any>(
 
     return () => unsubscribe();
   }, [memoizedDocRef]); // Re-run if the memoizedDocRef changes.
+
+  if(memoizedDocRef && !memoizedDocRef.__memo) {
+    throw new Error('useDoc ref must be memoized with useMemoFirebase');
+  }
 
   return { data, isLoading, error };
 }
