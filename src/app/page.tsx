@@ -196,7 +196,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-[#0A1A05] text-gray-100 font-body overflow-x-hidden">
+    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-green-950 to-background text-gray-100 font-body overflow-x-hidden">
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
@@ -303,8 +303,7 @@ export default function Home() {
 
       <footer className="w-full text-center py-8 mt-12 border-t border-border">
           <p className="font-bold text-lg">@visao.de.jogo.oficial</p>
-          <p className="text-muted-foreground text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>
-      </footer>
+          <p className="text-muted-foreground text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>      </footer>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
           <DialogContent className="bg-gray-900 border-primary/50 text-white">
