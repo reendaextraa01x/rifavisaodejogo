@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { SlothMascot } from "@/components/icons/sloth-mascot";
-import { Award, Gift, Handshake, Percent, Ticket, Users } from "lucide-react";
+import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
 import {
@@ -14,6 +14,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useCollection, useFirestore, useMemoFirebase } from "@/firebase";
@@ -40,6 +45,7 @@ export default function Home() {
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isTicketsOpen, setIsTicketsOpen] = useState(false);
   const { toast } = useToast();
   const firestore = useFirestore();
   const auth = useAuth();
@@ -177,7 +183,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-[#111A07] to-[#1A330A] text-gray-100 font-body overflow-x-hidden">
+    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-gray-900 to-[#0A1A05] text-gray-100 font-body overflow-x-hidden">
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4">
@@ -190,7 +196,7 @@ export default function Home() {
           </p>
         </header>
 
-        <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm">
+        <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
           <h2 className="text-2xl font-bold mb-4">
             Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
           </h2>
@@ -247,8 +253,17 @@ export default function Home() {
         )}
 
         <section className="w-full">
-            <h2 className="font-headline text-4xl text-center mb-6 text-white">Números da Sorte</h2>
-            <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen}>
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
+                Números da Sorte
+                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+            </CollapsibleContent>
+          </Collapsible>
         </section>
 
         <section className="w-full">
@@ -306,3 +321,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

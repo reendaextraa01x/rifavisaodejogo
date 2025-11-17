@@ -37,7 +37,7 @@ export function MyTickets({ userId }: MyTicketsProps) {
 
   if (isLoading) {
     return (
-      <Card className="bg-card/30 border-border backdrop-blur-sm">
+      <Card className="bg-card/30 border-border backdrop-blur-sm shadow-lg shadow-black/20">
         <CardHeader>
           <CardTitle className="font-headline text-3xl text-center text-primary">
             Carregando seus números...
@@ -52,7 +52,7 @@ export function MyTickets({ userId }: MyTicketsProps) {
   }
 
   return (
-    <Card className="bg-card/30 border-border backdrop-blur-sm w-full">
+    <Card className="bg-card/30 border-border backdrop-blur-sm w-full shadow-lg shadow-black/20">
       <CardHeader>
         <CardTitle className="font-headline text-3xl text-center text-primary flex items-center justify-center gap-2">
           <Ticket className="w-8 h-8" /> Seus Números da Sorte
@@ -62,7 +62,7 @@ export function MyTickets({ userId }: MyTicketsProps) {
         {sortedTickets.map((ticket) => (
           <div
             key={ticket.id}
-            className="flex items-center justify-center bg-primary text-primary-foreground font-bold w-16 h-16 rounded-full text-xl shadow-lg"
+            className="flex items-center justify-center bg-primary text-primary-foreground font-bold w-16 h-16 rounded-full text-xl shadow-lg transform transition-transform hover:scale-110"
           >
             {String(ticket.ticketNumber).padStart(3, '0')}
           </div>
@@ -71,3 +71,5 @@ export function MyTickets({ userId }: MyTicketsProps) {
     </Card>
   );
 }
+
+    

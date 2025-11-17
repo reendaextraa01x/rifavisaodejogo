@@ -20,16 +20,28 @@ interface RaffleTicketsGridProps {
     isLoading: boolean;
 }
 
-const FootballIcon = () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-        <path
-        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11.5,3.05L15.3,5.74L14.2,9.5L10,8.04L11.5,3.05M8.7,4.34L10,8.04L6.5,10.04L4.8,6.85L8.7,4.34M4.05,7.8L6.5,10.04L5.18,12.32L3.13,10.13L4.05,7.8M12.5,3.05L14,8.04L17.5,9.5L18.7,5.74L12.5,3.05M15.3,5.74L11.5,3.05L10,8.04L14.2,9.5L15.3,5.74M8.7,4.34L12,2.08L15.3,5.74L14.2,9.5L10,8.04L8.7,4.34M4.8,6.85L8.7,4.34L10,8.04L6.5,10.04L4.8,6.85M3.13,10.13L5.18,12.32L6.5,10.04L4.05,7.8L3.13,10.13M2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
-        style={{
-            stroke: 'hsl(var(--primary))',
-            strokeWidth: 0.5,
-            fill: 'hsl(var(--background))'
-        }}
-        />
+const FootballIcon = ({ isSold }: { isSold: boolean }) => (
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+        <defs>
+            <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop offset="0%" style={{ stopColor: 'hsl(var(--primary) / 0.5)', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: 'hsl(var(--primary) / 0)', stopOpacity: 1 }} />
+            </radialGradient>
+        </defs>
+        
+        {/* Glow effect for available tickets */}
+        {!isSold && <circle cx="16" cy="16" r="15" fill="url(#grad1)" />}
+
+        <circle cx="16" cy="16" r="14" fill={isSold ? "hsl(var(--muted) / 0.2)" : "hsl(var(--card))"} stroke="hsl(var(--border))" strokeWidth="0.5"/>
+        
+        {/* Hexagons */}
+        <path d="M16 4.5 L20.3 7 L20.3 11.5 L16 14 L11.7 11.5 L11.7 7 Z" fill={isSold ? "hsl(var(--muted) / 0.3)" : "hsl(var(--primary) / 0.7)"} />
+        <path d="M10.3 15.25 L11.7 17 L10.3 18.75 L7.7 18.75 L6.3 17 L7.7 15.25 Z" fill={isSold ? "hsl(var(--muted) / 0.3)" : "hsl(var(--primary) / 0.7)"} />
+        <path d="M21.7 15.25 L23.1 17 L21.7 18.75 L19.1 18.75 L17.7 17 L19.1 15.25 Z" fill={isSold ? "hsl(var(--muted) / 0.3)" : "hsl(var(--primary) / 0.7)"} />
+        <path d="M16 20.5 L20.3 23 L20.3 27.5 L16 30 L11.7 27.5 L11.7 23 Z" fill={isSold ? "hsl(var(--muted) / 0.3)" : "hsl(var(--primary) / 0.7)"} transform="rotate(180 16 25.25)" />
+
+        {/* Inner shadow for 3D effect */}
+        <circle cx="16" cy="16" r="14" fill="transparent" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
     </svg>
 )
 
@@ -69,17 +81,17 @@ export function RaffleTicketsGrid({ tickets, isLoading }: RaffleTicketsGridProps
                         return (
                             <div key={number}
                                 className={cn(
-                                    "relative flex items-center justify-center w-10 h-10 aspect-square rounded-full transition-all duration-200",
-                                    isSold ? "opacity-30 cursor-not-allowed" : "hover:scale-110"
+                                    "relative flex items-center justify-center w-10 h-10 aspect-square rounded-full transition-all duration-300 group",
+                                    isSold ? "opacity-40 cursor-not-allowed" : "hover:scale-110 hover:z-10"
                                 )}
                                 title={isSold ? `Vendido` : `Número ${String(number).padStart(3, '0')}`}
                             >
-                                <div className="absolute inset-0 text-background">
-                                   <FootballIcon />
+                                <div className="absolute inset-0">
+                                   <FootballIcon isSold={isSold} />
                                 </div>
                                <span className={cn(
-                                    "relative z-10 font-bold text-xs",
-                                     isSold ? 'text-muted-foreground' : 'text-foreground'
+                                    "relative z-10 font-bold text-xs transition-colors",
+                                     isSold ? 'text-muted-foreground' : 'text-foreground group-hover:text-primary'
                                 )}>
                                     {String(number).padStart(3, '0')}
                                 </span>
@@ -91,3 +103,5 @@ export function RaffleTicketsGrid({ tickets, isLoading }: RaffleTicketsGridProps
         </Card>
     );
 }
+
+    

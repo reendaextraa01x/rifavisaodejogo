@@ -59,7 +59,7 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
 
     if (tickets.length === 0 && topBuyers.length === 0) {
         return (
-            <Card className="bg-card/30 border-border backdrop-blur-sm">
+            <Card className="bg-card/30 border-border backdrop-blur-sm shadow-lg shadow-black/20">
                 <CardHeader>
                     <CardTitle className="font-headline text-3xl text-center text-primary flex items-center justify-center gap-2">
                         <Trophy className="w-8 h-8" /> Top Compradores
@@ -73,7 +73,7 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
     }
 
     return (
-        <Card className="bg-card/30 border-border backdrop-blur-sm w-full">
+        <Card className="bg-card/30 border-border backdrop-blur-sm w-full shadow-lg shadow-black/20">
             <CardHeader>
                 <CardTitle className="font-headline text-3xl text-center text-primary flex items-center justify-center gap-2">
                     <Trophy className="w-8 h-8" /> Top Compradores
@@ -81,7 +81,7 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
             </CardHeader>
             <CardContent className="space-y-4">
                 {topBuyers.map((buyer, index) => (
-                    <div key={buyer.userId} className="flex items-center justify-between bg-card/50 p-3 rounded-lg">
+                    <div key={buyer.userId} className="flex items-center justify-between bg-card/50 p-3 rounded-lg transition-all duration-300 hover:bg-card hover:shadow-primary/20 hover:shadow-md">
                         <div className="flex items-center gap-4">
                             <span className="font-bold text-lg w-6">{index + 1}.</span>
                             <Avatar>
@@ -103,3 +103,5 @@ export function TopBuyers({ tickets }: TopBuyersProps) {
         </Card>
     );
 }
+
+    
