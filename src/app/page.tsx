@@ -17,10 +17,12 @@ import {
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import { collection, query, where, getDocs, writeBatch } from "firebase/firestore";
+import { collection, query, where, getDocs, writeBatch, doc } from "firebase/firestore";
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useUser } from "@/firebase/provider";
-
+import { TopBuyers } from "@/components/raffle/top-buyers";
+import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
+import { MyTickets } from "@/components/raffle/my-tickets";
 
 type RaffleTicket = {
   id: string;
@@ -29,6 +31,8 @@ type RaffleTicket = {
   isSold: boolean;
   purchaseId?: string;
   userId?: string;
+  userName?: string;
+  userPhoto?: string;
 };
 
 export default function Home() {
@@ -72,9 +76,6 @@ export default function Home() {
       let currentUser = user;
       if (!currentUser && !isUserLoading) {
         initiateAnonymousSignIn(auth);
-        // We can't wait for the user to be signed in here, as it's non-blocking.
-        // For this simulation, we'll proceed, but a real app would need to handle this state change.
-        // A simple solution is to ask the user to click "Confirm Payment" again once logged in.
         toast({
           title: "Aguardando autenticação...",
           description: "Por favor, clique em 'Confirmar Pagamento' novamente.",
@@ -91,6 +92,10 @@ export default function Home() {
         });
         setIsProcessing(false);
         return;
+      }
+
+      if (!firestore) {
+        throw new Error("Firestore not initialized");
       }
 
       const availableTicketsQuery = query(
@@ -128,7 +133,9 @@ export default function Home() {
         batch.update(ticketRef, {
           isSold: true,
           purchaseId: purchaseId,
-          userId: currentUser.uid
+          userId: currentUser.uid,
+          userName: currentUser.displayName || "Anônimo",
+          userPhoto: currentUser.photoURL || undefined,
         });
         boughtNumbers.push(ticketDoc.data().ticketNumber);
       });
@@ -232,6 +239,22 @@ export default function Home() {
                 ))}
             </div>
         </section>
+        
+        {user && (
+          <section className="w-full">
+            <MyTickets userId={user.uid} />
+          </section>
+        )}
+
+        <section className="w-full">
+            <h2 className="font-headline text-4xl text-center mb-6 text-white">Números da Sorte</h2>
+            <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+        </section>
+
+        <section className="w-full">
+            <TopBuyers tickets={tickets || []} />
+        </section>
+
 
         <section className="w-full">
             <Card className="bg-card/30 border-border backdrop-blur-sm">
