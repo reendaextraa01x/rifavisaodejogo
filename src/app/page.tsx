@@ -27,7 +27,6 @@ import { useUser } from "@/firebase/provider";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
 import { BonusNumber } from "@/components/raffle/bonus-number";
-import { SlothMascot } from "@/components/icons/sloth-mascot";
 
 type RaffleTicket = {
   id: string;
@@ -42,44 +41,41 @@ type RaffleTicket = {
 
 export default function Home() {
   const totalNumbers = 500;
-  const percentageToFill = 87.63;
-  const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
-
-  const [ticketQuantity, setTicketQuantity] = useState(1);
-  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isTicketsOpen, setIsTicketsOpen] = useState(false);
   const { toast } = useToast();
   const firestore = useFirestore();
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
 
-  const tickets: RaffleTicket[] = useMemo(() => {
-    const soldNumbers = new Set<number>();
-    while (soldNumbers.size < initialSoldCount) {
-      soldNumbers.add(Math.floor(Math.random() * totalNumbers) + 1);
+  const [ticketQuantity, setTicketQuantity] = useState(1);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isTicketsOpen, setIsTicketsOpen] = useState(false);
+
+  const ticketsQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, "raffleTickets"), where("raffleId", "==", "main-raffle"));
+  }, [firestore]);
+
+  const { data: tickets, isLoading: ticketsLoading } = useCollection<RaffleTicket>(ticketsQuery);
+
+  const { soldCount, availableCount, percentageSold } = useMemo(() => {
+    if (!tickets) {
+      // Mocked data for initial load impression
+      const percentageToFill = 87.63;
+      const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
+      return {
+        soldCount: initialSoldCount,
+        availableCount: totalNumbers - initialSoldCount,
+        percentageSold: percentageToFill,
+      };
     }
-
-    const generatedTickets: RaffleTicket[] = [];
-    for (let i = 1; i <= totalNumbers; i++) {
-      const isSold = soldNumbers.has(i);
-      generatedTickets.push({
-        id: `ticket-${i}`,
-        raffleId: "main-raffle",
-        ticketNumber: i,
-        isSold: isSold,
-        userId: isSold ? `user_${i % 10}` : undefined,
-        userName: isSold ? `Comprador ${i % 10}` : undefined,
-      });
-    }
-    return generatedTickets;
-  }, [initialSoldCount]);
-  const ticketsLoading = false;
-
-
-  const soldCount = useMemo(() => tickets?.filter(t => t.isSold).length || 0, [tickets]);
-  const availableCount = totalNumbers - soldCount;
-  const percentageSold = (soldCount / totalNumbers) * 100;
+    const sold = tickets.filter(t => t.isSold).length;
+    return {
+      soldCount: sold,
+      availableCount: totalNumbers - sold,
+      percentageSold: (sold / totalNumbers) * 100,
+    };
+  }, [tickets]);
 
 
   const handleBuyClick = () => {
