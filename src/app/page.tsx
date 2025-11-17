@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { SlothMascot } from "@/components/icons/sloth-mascot";
 import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
@@ -200,7 +199,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <SlothMascot className="w-48 h-auto md:w-56" />
+          <Image src="https://i.imgur.com/iY4YsxL.png" alt="Jogador de futebol comemorando" width={224} height={224} className="w-48 h-auto md:w-56" data-ai-hint="soccer player" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -333,3 +332,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
