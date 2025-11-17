@@ -27,7 +27,7 @@ import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useUser } from "@/firebase/provider";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
-import { BonusNumber } from "@/components/raffle/bonus-number";
+import { SlothAnalysis } from "@/components/raffle/sloth-analysis";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type RaffleTicket = {
@@ -51,7 +51,7 @@ export default function Home() {
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isTicketsOpen, setIsTicketsOpen] = useState(false);
+  const [isTicketsOpen, setIsTicketsOpen] = useState(true);
 
   const ticketsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -192,25 +192,6 @@ export default function Home() {
     { icon: <Gift className="text-primary" />, text: "A camisa será enviada para o endereço do ganhador sem custos de frete." },
   ];
   
-  const combos = [
-    {
-      quantity: 1,
-      price: 1,
-      text: "Azarão",
-    },
-    {
-      quantity: 5,
-      price: 5,
-      text: "Apostador",
-      popular: true,
-    },
-    {
-      quantity: 10,
-      price: 10,
-      text: "Investidor",
-    },
-  ];
-
   return (
     <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-green-950 to-background text-gray-100 font-body overflow-x-hidden">
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
@@ -234,71 +215,38 @@ export default function Home() {
         </section>
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <BonusNumber tickets={tickets || []} />
+          <SlothAnalysis tickets={tickets || []} />
+        </section>
+
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
+            <CardContent className="space-y-4 p-0">
+                <p className="text-xl font-bold">Escolha quantos números você quer:</p>
+                <div className="flex items-center justify-center space-x-4">
+                    <Button variant="outline" size="icon" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
+                    <Input 
+                      type="number" 
+                      className="text-center text-2xl font-bold w-24 h-14 bg-background/50 border-primary/50" 
+                      value={ticketQuantity}
+                      onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                      min="1"
+                      max={availableCount}
+                    />
+                    <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+                </div>
+                <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
+                <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white font-bold text-xl py-8 px-10 rounded-full shadow-lg w-full animate-glow" style={{"--primary": "90 60% 50%"} as React.CSSProperties} onClick={handleBuyClick}>
+                    COMPRAR {ticketQuantity} NÚMERO{ticketQuantity > 1 ? 'S' : ''}
+                </Button>
+            </CardContent>
+          </Card>
         </section>
         
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <h2 className="font-headline text-4xl text-center mb-6 text-white">Aumente suas chances! 🍀</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {combos.map((combo) => (
-                <Card
-                  key={combo.quantity}
-                  className={`bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 cursor-pointer hover:scale-105 hover:shadow-primary/50 group ${combo.popular ? 'border-2 border-primary animate-glow' : ''}`}
-                  onClick={() => setTicketQuantity(combo.quantity)}
-                >
-                  {combo.popular && (
-                    <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground text-xs font-bold py-1 px-3 rounded-full uppercase tracking-wider">
-                      Popular
-                    </div>
-                  )}
-                  <CardHeader className="p-0 mb-4">
-                    <CardTitle className="font-headline text-2xl text-primary">{combo.text}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-0 space-y-2">
-                    <p className="text-4xl font-bold">
-                      {combo.quantity} <span className="text-2xl font-headline text-muted-foreground">Número{combo.quantity > 1 ? 's' : ''}</span>
-                    </p>
-                    <p className="text-2xl font-headline text-white">
-                      R$ {combo.price.toFixed(2).replace('.', ',')}
-                    </p>
-                    <Button variant="ghost" className="w-full group-hover:bg-accent group-hover:text-accent-foreground">
-                      <CheckCircle className="mr-2 h-4 w-4" /> Selecionar
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-        </section>
-
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '1.0s' }}>
-            <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
-              <CardContent className="space-y-4">
-                  <p className="text-xl font-bold">Ou escolha quantos números você quer:</p>
-                  <div className="flex items-center justify-center space-x-4">
-                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
-                      <Input 
-                        type="number" 
-                        className="text-center text-2xl font-bold w-24 h-14" 
-                        value={ticketQuantity}
-                        onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                        min="1"
-                        max={availableCount}
-                      />
-                      <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
-                  </div>
-                  <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg animate-glow w-full" onClick={handleBuyClick}>
-                      COMPRAR {ticketQuantity} NÚMERO{ticketQuantity > 1 ? 'S' : ''}
-                  </Button>
-              </CardContent>
-            </Card>
-        </section>
-
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
-              <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
-                Números da Sorte
+              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
+                Ver Números da Sorte
                 <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
               </button>
             </CollapsibleTrigger>
@@ -309,12 +257,12 @@ export default function Home() {
         </section>
 
         {user && (
-          <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
+          <section className="w-full animate-fade-in" style={{ animationDelay: '1.0s' }}>
             <MyTickets userId={user.uid} />
           </section>
         )}
 
-        <section className="w-full animate-fade-in" style={{ animationDelay: '1.4s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
             <Card className="bg-card/30 border-border backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle className="font-headline text-3xl text-center text-primary">Regras e Transparência</CardTitle>
