@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck, CheckCircle, Minus, Plus } from "lucide-react";
+import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, Star, Minus, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
 import {
@@ -185,6 +185,7 @@ export default function Home() {
 
   const rules = [
     { icon: <Award className="text-primary" />, text: "Prêmio: R$ 2.500,00 no PIX + Camisa oficial surpresa autografada do Brasileirão 2025." },
+    { icon: <Star className="text-primary animate-pulse" />, text: "Números Dourados: Compre um número dourado e concorra a um prêmio extra instantâneo!" },
     { icon: <Ticket className="text-primary" />, text: "500 números de 001 a 500. Aumente suas chances!" },
     { icon: <Percent className="text-primary" />, text: "Sorteio baseado no resultado da Loteria Federal para garantir a lisura." },
     { icon: <Users className="text-primary" />, text: "O sorteio será realizado AO VIVO em nosso canal assim que todos os números forem vendidos." },
@@ -217,8 +218,22 @@ export default function Home() {
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <SlothAnalysis tickets={tickets || []} />
         </section>
+        
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
+                Ver Números da Sorte
+                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+            </CollapsibleContent>
+          </Collapsible>
+        </section>
 
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
                     <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
@@ -258,20 +273,6 @@ export default function Home() {
                     </Button>
                 </div>
             </div>
-        </section>
-        
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
-          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
-            <CollapsibleTrigger asChild>
-              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
-                Ver Números da Sorte
-                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
-              </button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
-            </CollapsibleContent>
-          </Collapsible>
         </section>
 
         {user && (
@@ -329,10 +330,3 @@ export default function Home() {
       </Dialog>
     </div>
   );
-
-    
-
-    
-
-    
-
