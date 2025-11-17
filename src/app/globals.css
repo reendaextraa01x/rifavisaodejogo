@@ -110,4 +110,21 @@
       box-shadow: 0 0 20px 0px hsl(var(--primary)), 0 0 40px 5px hsl(var(--primary) / 0.5);
     }
   }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-10vh) translateX(var(--tw-translate-x)) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) translateX(var(--tw-translate-x)) rotate(360deg);
+      opacity: 0;
+    }
+  }
 }

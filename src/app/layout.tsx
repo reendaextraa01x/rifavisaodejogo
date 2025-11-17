@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster";
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
+import { FallingMoney } from '@/components/animations/falling-money';
 
 export const metadata: Metadata = {
   title: 'Rifa Visão de Jogo',
@@ -21,6 +22,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
+        <FallingMoney />
         <FirebaseClientProvider>
           {children}
         </FirebaseClientProvider>
