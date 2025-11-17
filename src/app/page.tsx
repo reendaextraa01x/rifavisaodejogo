@@ -43,22 +43,6 @@ type RaffleTicket = {
   userPhoto?: string;
 };
 
-const LeafIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 120 120"
-    className={cn("fill-current", className)}
-  >
-    <path d="M60,0C26.9,0,0,26.9,0,60c0,33.1,26.9,60,60,60c33.1,0,60-26.9,60-60C120,26.9,93.1,0,60,0z M82.9,35.6 c-3.3-3.3-8.6-3.3-11.9,0L60,46.1L49,35.6c-3.3-3.3-8.6-3.3-11.9,0s-3.3,8.6,0,11.9L48.1,60L37.1,72.4c-3.3,3.3-3.3,8.6,0,11.9 c1.6,1.6,3.8,2.5,6,2.5s4.3-0.8,6-2.5L60,73.9l11.9,11.9c1.6,1.6,3.8,2.5,6,2.5s4.3-0.8,6-2.5c3.3-3.3,3.3-8.6,0-11.9L71.9,60 l11.9-11.9C86.2,44.2,86.2,38.9,82.9,35.6z"
-      transform="scale(1.5) translate(-20, -20)"
-      fill="rgba(40, 80, 40, 0.4)"
-    >
-      <path d="M117.8,3.3C112.2-2.3,103.3-1,99,4.8l-52,69.5c-2.9,3.9-7.5,6.2-12.3,6.2H14.3c-8.8,0-16,7.2-16,16 s7.2,16,16,16h20.4c4.8,0,9.4-2.3,12.3-6.2l52-69.5C104.9,20.9,112.2,15.7,117.8,10z M93.4,22L41.3,91.5 c-1.4,1.9-3.6,3-5.9,3H14.3c-3.3,0-6-2.7-6-6s2.7-6,6-6h21.1c2.3,0,4.5-1.1,5.9-3l52-69.5c1.9-2.6,5.7-3.6,8.3-1.8 C100,8.8,100,14.6,98.1,17.2L38.8,84.4c-3.3,4.4-9.5,5.6-13.9,2.3s-5.6-9.5-2.3-13.9L81.9,6.1C87.4,0,96.7-1.6,102.8,3 C108.9,7.6,110,16.9,105,22.4L45.7,89.6c-3.3,4.4-9.5,5.6-13.9,2.3c-4.4-3.3-5.6-9.5-2.3-13.9L88.8,9.3 c2.6-3.4,1.6-8.2-1.8-10.8c-3.4-2.6-8.2-1.6-10.8,1.8L20.8,77.1C18.3,80.5,19.2,85.3,22.6,88s8.5,1.8,10.8-1.5L92.6,19.8 C96-16.4,100.8-15.5,103.4-12.1c2.6,3.4,1.6,8.2-1.8,10.8L40.8,75.4C37.5,79.8,31.3,81,26.9,77.7c-4.4-3.3-5.6-9.5-2.3-13.9 l59.3-67.2c3.4-3.8,9.2-4.2,13-0.8c3.8,3.4,4.2,9.2,0.8,13L42.4,75.9c-3.3,4.4-9.5,5.6-13.9,2.3s-5.6-9.5-2.3-13.9L85.4,9.6 C89.2,5.2,95.6,4.4,100,8.2s3.6,10-0.8,13.8L40,89.2C36.7,93.6,30.5,94.8,26.1,91.5s-5.6-9.5-2.3-13.9L83,10.4C86,6.6,91.4,6,95,9.6 c3.6,3.6,3,9.4-0.8,12.6L35,89.4c-3.3,4.4-9.5,5.6-13.9,2.3s-5.6-9.5-2.3-13.9l59.3-67.2c3.8-4.3,10.1-4.7,14.4-0.9 c4.3,3.8,4.7,10.1,0.9,14.4L37.4,91.4C34.1,95.8,27.9,97,23.5,93.7c-4.4-3.3-5.6-9.5-2.3-13.9L80.4,12.6 C83.9,8.5,90,8.2,94,12.2c4,4,3.8,10.5-0.5,14.3L34.2,93.7c-3.3,4.4-9.5,5.6-13.9,2.3c-4.4-3.3-5.6-9.5-2.3-13.9L77.3,15 c3.5-3.9,9.4-4.8,13.8-1.9s5.8,9,2.5,13.1L34.3,93.4c-3.3,4.4-9.5,5.6-13.9,2.3s-5.6-9.5-2.3-13.9L77.3,15z" />
-    </path>
-  </svg>
-);
-
-
 export default function Home() {
   const totalNumbers = 500;
   const { toast } = useToast();
@@ -280,9 +264,7 @@ export default function Home() {
           </p>
         </header>
 
-        <div className="relative w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <LeafIcon className="absolute -top-12 -left-20 w-36 h-36 text-green-900/40 opacity-80 -rotate-45" />
-          <LeafIcon className="absolute -bottom-16 -right-16 w-32 h-32 text-green-900/30 opacity-70 rotate-[120deg]" />
+        <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
             <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
               Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
@@ -423,7 +405,6 @@ export default function Home() {
       </Dialog>
     </div>
   );
-
-    
+}
 
     
