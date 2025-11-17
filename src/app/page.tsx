@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck, CheckCircle } from "lucide-react";
+import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck, CheckCircle, Minus, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
 import {
@@ -222,17 +222,29 @@ export default function Home() {
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
                     <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
-                    <div className="flex items-center justify-center space-x-2">
-                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full text-xl" onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}>-</Button>
-                        <Input 
-                          type="number" 
-                          className="text-center text-6xl font-bold w-40 h-24 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0" 
-                          value={ticketQuantity}
-                          onChange={(e) => setTicketQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                          min="1"
-                          max={availableCount}
-                        />
-                        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full text-xl" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
+                    <div className="flex items-center justify-center space-x-4">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors" 
+                          onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}
+                        >
+                          <Minus className="w-8 h-8" />
+                        </Button>
+                        
+                        <div className="relative w-40 h-24 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-black/20 rounded-xl border border-primary/30 backdrop-blur-sm"></div>
+                          <span className="relative text-7xl font-bold text-white drop-shadow-lg">{ticketQuantity}</span>
+                        </div>
+
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors" 
+                          onClick={() => setTicketQuantity(ticketQuantity + 1)}
+                        >
+                          <Plus className="w-8 h-8" />
+                        </Button>
                     </div>
                     <p className="text-5xl font-headline text-primary tracking-widest">
                       Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}
