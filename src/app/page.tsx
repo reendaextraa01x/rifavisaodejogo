@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown } from "lucide-react";
+import { Award, Gift, Handshake, Percent, Ticket, Users, ChevronDown, UserCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo, useEffect } from "react";
 import {
@@ -28,6 +28,7 @@ import { useUser } from "@/firebase/provider";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
 import { BonusNumber } from "@/components/raffle/bonus-number";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type RaffleTicket = {
   id: string;
@@ -183,12 +184,6 @@ export default function Home() {
   };
 
 
-  const pricingOptions = [
-    { tickets: 1, price: "1,00", emoji: "🎟️" },
-    { tickets: 3, price: "3,00", emoji: "🎟️🎟️🎟️" },
-    { tickets: 7, price: "7,00", emoji: "🎉" },
-  ];
-
   const rules = [
     { icon: <Award className="text-primary" />, text: "Prêmio: R$ 2.500,00 no PIX + Camisa oficial surpresa autografada do Brasileirão 2025." },
     { icon: <Ticket className="text-primary" />, text: "500 números de 001 a 500. Aumente suas chances!" },
@@ -250,23 +245,6 @@ export default function Home() {
         </section>
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <h2 className="font-headline text-4xl text-center mb-6 text-white">Combos com Desconto 🔥</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {pricingOptions.map((option, index) => (
-                    <Card key={index} className="bg-card/50 border-primary/30 text-center hover:bg-card hover:border-primary transition-all duration-300 transform hover:-translate-y-2 shadow-lg hover:shadow-primary/30 cursor-pointer" onClick={() => setTicketQuantity(option.tickets)}>
-                        <CardHeader>
-                            <CardTitle className="text-5xl">{option.emoji}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                            <p className="text-xl font-bold">{option.tickets} NÚMERO{option.tickets > 1 ? 'S' : ''}</p>
-                            <p className="text-4xl font-headline text-primary">R$ {option.price}</p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-        </section>
-        
-        <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
               <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
@@ -280,8 +258,41 @@ export default function Home() {
           </Collapsible>
         </section>
 
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1.0s' }}>
+          <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 animate-glow">
+            <CardHeader>
+              <CardTitle className="font-headline text-3xl text-primary flex items-center justify-center gap-2">
+                  <UserCheck className="w-8 h-8" /> Vagas Quase Esgotadas!
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center space-y-4">
+                <p className="text-lg text-muted-foreground">Muitos já garantiram seus números. Não fique de fora!</p>
+                <div className="flex -space-x-2 overflow-hidden">
+                  <Avatar>
+                    <AvatarImage src="https://i.pravatar.cc/150?img=1" alt="User 1"/>
+                    <AvatarFallback>U1</AvatarFallback>
+                  </Avatar>
+                   <Avatar>
+                    <AvatarImage src="https://i.pravatar.cc/150?img=2" alt="User 2"/>
+                    <AvatarFallback>U2</AvatarFallback>
+                  </Avatar>
+                   <Avatar>
+                    <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User 3"/>
+                    <AvatarFallback>U3</AvatarFallback>
+                  </Avatar>
+                  <Avatar>
+                    <AvatarFallback>+{soldCount > 3 ? soldCount - 3 : 0}</AvatarFallback>
+                  </Avatar>
+                </div>
+                <p className="font-bold text-white text-xl">
+                  Apenas <span className="text-primary text-2xl">{availableCount}</span> números disponíveis!
+                </p>
+            </CardContent>
+          </Card>
+        </section>
+
         {user && (
-          <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
+          <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
             <MyTickets userId={user.uid} />
           </section>
         )}
@@ -335,5 +346,7 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
 
     
