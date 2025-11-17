@@ -63,7 +63,7 @@ export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
                             <div className="absolute w-24 h-24 rounded-full bg-primary/30 animate-ping delay-400"></div>
                         </div>
                     )}
-                    <SlothMascot className={cn("w-40 h-auto transition-all duration-500", isAnalyzing && "animate-pulse" )} />
+                    <SlothMascot isAnalyzing={isAnalyzing} className={cn("transition-all duration-500", isAnalyzing && "animate-pulse" )} />
                 </div>
 
                 {luckyNumber !== null ? (
