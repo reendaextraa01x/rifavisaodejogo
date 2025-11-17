@@ -195,18 +195,18 @@ export default function Home() {
   const combos = [
     {
       quantity: 1,
-      price: 10,
+      price: 1,
       text: "Azarão",
     },
     {
-      quantity: 3,
-      price: 25,
+      quantity: 5,
+      price: 5,
       text: "Apostador",
       popular: true,
     },
     {
-      quantity: 7,
-      price: 50,
+      quantity: 10,
+      price: 10,
       text: "Investidor",
     },
   ];
@@ -235,20 +235,6 @@ export default function Home() {
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <BonusNumber tickets={tickets || []} />
-        </section>
-
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
-          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
-            <CollapsibleTrigger asChild>
-              <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
-                Números da Sorte
-                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
-              </button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
-            </CollapsibleContent>
-          </Collapsible>
         </section>
         
         <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
@@ -300,12 +286,26 @@ export default function Home() {
                       />
                       <Button variant="outline" size="icon" onClick={() => setTicketQuantity(ticketQuantity + 1)}>+</Button>
                   </div>
-                  <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 10 - (ticketQuantity >= 7 ? 20 : (ticketQuantity >= 3 ? 5 : 0))).toFixed(2).replace('.', ',')}</p>
+                  <p className="text-4xl font-headline text-primary">Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}</p>
                   <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-xl py-8 px-10 rounded-full shadow-lg animate-glow w-full" onClick={handleBuyClick}>
                       COMPRAR {ticketQuantity} NÚMERO{ticketQuantity > 1 ? 'S' : ''}
                   </Button>
               </CardContent>
             </Card>
+        </section>
+
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
+                Números da Sorte
+                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+            </CollapsibleContent>
+          </Collapsible>
         </section>
 
         {user && (
@@ -363,3 +363,5 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
