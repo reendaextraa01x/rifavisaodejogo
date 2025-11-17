@@ -10,15 +10,15 @@ export function SlothMascot({ isAnalyzing, className, ...props }: SlothMascotPro
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 200 130"
-      aria-label="Mascote do canal Visão de Jogo: uma preguiça de óculos escuros deitada numa rede."
+      aria-label="Mascote do canal Visão de Jogo: uma preguiça realista de óculos escuros deitada num galho de árvore."
       className={cn("w-40 h-auto", className)}
       {...props}
     >
       <style>
         {`
-          .hammock, .sloth-g-root {
+          .branch, .sloth-g-root {
             animation: swing 4s ease-in-out infinite alternate;
-            transform-origin: 100px 60px;
+            transform-origin: 100px 50px;
           }
            .sloth-g-root {
              animation-direction: alternate-reverse;
@@ -30,8 +30,8 @@ export function SlothMascot({ isAnalyzing, className, ...props }: SlothMascotPro
             animation: ${isAnalyzing ? 'scan-animation 1.5s ease-out infinite' : 'none'};
           }
           @keyframes swing {
-            from { transform: rotate(-1.5deg) translateY(-2px); }
-            to { transform: rotate(1.5deg) translateY(2px); }
+            from { transform: rotate(-1deg) translateY(-1px); }
+            to { transform: rotate(1deg) translateY(1px); }
           }
           @keyframes scan-animation {
             0% { opacity: 0; transform: translateY(-5px); }
@@ -42,15 +42,6 @@ export function SlothMascot({ isAnalyzing, className, ...props }: SlothMascotPro
         `}
       </style>
       <defs>
-        <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur" />
-          <feFlood floodColor="hsl(var(--primary))" result="flood" />
-          <feComposite in="flood" in2="blur" operator="in" result="glow" />
-          <feMerge>
-            <feMergeNode in="glow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
         <radialGradient id="sloth-fur-gradient" cx="0.5" cy="0.5" r="0.7">
             <stop offset="0%" stopColor="#8D6E63" />
             <stop offset="100%" stopColor="#6D4C41" />
@@ -59,9 +50,15 @@ export function SlothMascot({ isAnalyzing, className, ...props }: SlothMascotPro
             <stop offset="0%" stopColor="#222" />
             <stop offset="100%" stopColor="#111" />
         </linearGradient>
+        <linearGradient id="branch-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#8B5E3C" />
+            <stop offset="50%" stopColor="#694A2D" />
+            <stop offset="100%" stopColor="#5A3F25" />
+        </linearGradient>
       </defs>
       
-      <path className="hammock" d="M5 60 C 50 120, 150 120, 195 60" stroke="hsl(var(--primary))" strokeWidth="3" fill="none" filter="url(#neon-glow)" />
+      {/* Branch */}
+      <path className="branch" d="M0 65 Q 10 55, 25 58 T 50 55 C 80 45, 120 45, 150 55 T 175 58 T 200 60 L 200 70 Q 170 80, 150 70 T 120 65 C 90 60, 50 60, 20 70 T 0 75 Z" fill="url(#branch-gradient)" stroke="#4A341E" strokeWidth="1" />
 
       <g className="sloth-g-root" transform="translate(0, -15)">
         {/* Body */}
