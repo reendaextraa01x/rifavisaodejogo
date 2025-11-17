@@ -255,19 +255,19 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={160} height={160} className="md:w-40 md:h-40 w-36 h-36" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={140} height={140} className="md:w-36 md:h-36 w-32 h-32" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
-          <p className="text-2xl md:text-3xl font-headline text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] flex items-center gap-x-2">
-            💸 <span className="text-5xl md:text-6xl text-primary font-bold drop-shadow-[0_4px_4px_rgba(0,255,100,0.3)]">R$2.500</span> NO PIX + CAMISA 💸
+          <p className="text-xl md:text-3xl font-headline text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] flex items-center gap-x-2">
+            💸 <span className="text-4xl md:text-6xl text-primary font-bold drop-shadow-[0_4px_4px_rgba(0,255,100,0.3)]">R$2.500</span> NO PIX + CAMISA 💸
           </p>
         </header>
 
         <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
-            <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
-              Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
+            <h2 className="text-xl md:text-2xl font-bold mb-4 font-headline tracking-wider">
+              Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-2xl md:text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
             </h2>
             <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
             <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
@@ -283,51 +283,51 @@ export default function Home() {
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
                     <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
-                    <div className="flex items-center justify-center space-x-4">
+                    <div className="flex items-center justify-center space-x-2 sm:space-x-4">
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
+                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
                           onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}
                           disabled={!!chosenNumber}
                         >
-                          <Minus className="w-8 h-8" />
+                          <Minus className="w-6 h-6 sm:w-8 sm:h-8" />
                         </Button>
                         
-                        <div className="relative w-40 h-24 flex items-center justify-center">
+                        <div className="relative w-28 sm:w-40 h-20 sm:h-24 flex items-center justify-center">
                           <div className="absolute inset-0 bg-black/20 rounded-xl border border-primary/30 backdrop-blur-sm"></div>
-                          <span className="relative text-7xl font-bold text-white drop-shadow-lg">{ticketQuantity}</span>
+                          <span className="relative text-6xl sm:text-7xl font-bold text-white drop-shadow-lg">{ticketQuantity}</span>
                         </div>
 
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
+                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
                           onClick={() => setTicketQuantity(ticketQuantity + 1)}
                           disabled={!!chosenNumber}
                         >
-                          <Plus className="w-8 h-8" />
+                          <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
                         </Button>
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="chosenNumber" className="text-lg font-headline tracking-wider text-muted-foreground">Ou escolha seu número (opcional):</label>
+                        <label htmlFor="chosenNumber" className="text-md sm:text-lg font-headline tracking-wider text-muted-foreground">Ou escolha seu número (opcional):</label>
                         <Input
                           id="chosenNumber"
                           type="number"
                           placeholder="Ex: 007"
-                          className="max-w-xs mx-auto text-center text-xl"
+                          className="max-w-[200px] sm:max-w-xs mx-auto text-center text-lg sm:text-xl"
                           value={chosenNumber}
                           onChange={(e) => setChosenNumber(e.target.value)}
                         />
                     </div>
                     
-                    <p className="text-5xl font-headline text-primary tracking-widest">
+                    <p className="text-4xl sm:text-5xl font-headline text-primary tracking-widest">
                       Total: R$ {(chosenNumber ? 1 : ticketQuantity * 1).toFixed(2).replace('.', ',')}
                     </p>
                     <Button 
                       size="lg" 
-                      className="bg-gradient-to-r from-green-500 to-lime-400 hover:from-green-600 hover:to-lime-500 text-black font-bold text-2xl py-8 px-10 rounded-full shadow-lg w-full transform transition-transform hover:scale-105"
+                      className="bg-gradient-to-r from-green-500 to-lime-400 hover:from-green-600 hover:to-lime-500 text-black font-bold text-xl sm:text-2xl py-6 sm:py-8 px-8 sm:px-10 rounded-full shadow-lg w-full transform transition-transform hover:scale-105"
                       onClick={handleBuyClick}
                     >
                         COMPRAR AGORA
@@ -339,9 +339,9 @@ export default function Home() {
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
-              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
+              <button className="w-full flex items-center justify-center font-headline text-2xl sm:text-4xl text-center my-2 sm:my-4 text-white hover:text-primary transition-colors">
                 Ver Números da Sorte
-                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`ml-2 h-6 w-6 sm:h-8 sm:w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
               </button>
             </CollapsibleTrigger>
             <CollapsibleContent>
@@ -359,11 +359,11 @@ export default function Home() {
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
             <Card className="bg-card/30 border-border backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="font-headline text-3xl text-center text-primary">Regras e Transparência</CardTitle>
+                    <CardTitle className="font-headline text-2xl sm:text-3xl text-center text-primary">Regras e Transparência</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 text-sm sm:text-base">
                     {rules.map((rule, index) => (
-                        <div key={index} className="flex items-start space-x-4">
+                        <div key={index} className="flex items-start space-x-3 sm:space-x-4">
                             <div className="flex-shrink-0 mt-1">{rule.icon}</div>
                             <p className="text-gray-300 font-bold">{rule.text}</p>
                         </div>
@@ -374,20 +374,20 @@ export default function Home() {
       </main>
 
       <footer className="w-full text-center py-8 mt-12 border-t border-border">
-          <p className="font-bold text-lg">@visao.de.jogo.oficial</p>
-          <p className="text-muted-foreground text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>
+          <p className="font-bold text-md sm:text-lg">@visao.de.jogo.oficial</p>
+          <p className="text-muted-foreground text-xs sm:text-sm">Sorteio ao vivo no TikTok – transparência total 🚀</p>
       </footer>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-          <DialogContent className="bg-gray-900 border-primary/50 text-white">
+          <DialogContent className="bg-gray-900 border-primary/50 text-white max-w-[90vw] sm:max-w-lg rounded-lg">
               <DialogHeader>
-                  <DialogTitle className="text-2xl font-headline text-primary text-center">Pagamento via PIX</DialogTitle>
-                  <DialogDescription className="text-center text-gray-300">
+                  <DialogTitle className="text-xl sm:text-2xl font-headline text-primary text-center">Pagamento via PIX</DialogTitle>
+                  <DialogDescription className="text-center text-gray-300 text-sm sm:text-base">
                       Escaneie o QR Code abaixo com seu app do banco ou copie o código.
                   </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col items-center space-y-4 py-4">
-                  <Image src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://firebase.google.com/" alt="QR Code PIX" width={200} height={200} className="rounded-lg border-4 border-primary" data-ai-hint="qr code" />
+                  <Image src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://firebase.google.com/" alt="QR Code PIX" width={180} height={180} className="rounded-lg border-4 border-primary sm:w-[200px] sm:h-[200px]" data-ai-hint="qr code" />
                   <Card className="w-full bg-black/50 p-3">
                       <p className="text-xs text-gray-400 break-words">000201265802BR5913NOMECOMPLETO6009SAOPAULO62070503***6304E2A8</p>
                   </Card>
