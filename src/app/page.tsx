@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -265,12 +266,6 @@ export default function Home() {
             </div>
         </section>
         
-        {user && (
-          <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
-            <MyTickets userId={user.uid} />
-          </section>
-        )}
-
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
@@ -284,6 +279,12 @@ export default function Home() {
             </CollapsibleContent>
           </Collapsible>
         </section>
+
+        {user && (
+          <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
+            <MyTickets userId={user.uid} />
+          </section>
+        )}
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.4s' }}>
             <Card className="bg-card/30 border-border backdrop-blur-sm">
@@ -334,4 +335,5 @@ export default function Home() {
       </Dialog>
     </div>
   );
-}
+
+    
