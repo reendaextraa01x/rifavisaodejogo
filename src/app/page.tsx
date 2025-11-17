@@ -42,6 +42,9 @@ type RaffleTicket = {
 
 export default function Home() {
   const totalNumbers = 500;
+  const percentageToFill = 87.63;
+  const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
+
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -51,12 +54,28 @@ export default function Home() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
 
-  const raffleTicketsQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
-    return query(collection(firestore, "raffleTickets"), where("raffleId", "==", "main-raffle"));
-  }, [firestore]);
+  // const raffleTicketsQuery = useMemoFirebase(() => {
+  //   if (!firestore) return null;
+  //   return query(collection(firestore, "raffleTickets"), where("raffleId", "==", "main-raffle"));
+  // }, [firestore]);
 
-  const { data: tickets, isLoading: ticketsLoading } = useCollection<RaffleTicket>(raffleTicketsQuery);
+  // const { data: tickets, isLoading: ticketsLoading } = useCollection<RaffleTicket>(raffleTicketsQuery);
+  const tickets: RaffleTicket[] = useMemo(() => {
+      const generatedTickets: RaffleTicket[] = [];
+      for (let i = 1; i <= totalNumbers; i++) {
+          generatedTickets.push({
+              id: `ticket-${i}`,
+              raffleId: "main-raffle",
+              ticketNumber: i,
+              isSold: i <= initialSoldCount,
+              userId: i <= initialSoldCount ? `user_${i % 10}` : undefined,
+              userName: i <= initialSoldCount ? `Comprador ${i % 10}` : undefined,
+          });
+      }
+      return generatedTickets;
+  }, [initialSoldCount]);
+  const ticketsLoading = false;
+
 
   const soldCount = useMemo(() => tickets?.filter(t => t.isSold).length || 0, [tickets]);
   const availableCount = totalNumbers - soldCount;
@@ -201,7 +220,7 @@ export default function Home() {
             Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
           </h2>
           <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
-          <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(1)}%)</p>
+          <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
         </section>
 
         <section className="w-full text-center">
@@ -320,4 +339,5 @@ export default function Home() {
       </Dialog>
     </div>
   );
-}
+
+    
