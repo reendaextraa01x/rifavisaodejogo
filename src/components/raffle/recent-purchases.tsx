@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ShoppingCart } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type RaffleTicket = {
@@ -14,113 +14,98 @@ type RaffleTicket = {
     userId?: string;
     userName?: string;
     userPhoto?: string;
-    purchaseId?: string;
 };
 
 interface RecentPurchasesProps {
     tickets: RaffleTicket[];
 }
 
-type Purchase = {
-    purchaseId: string;
+type TopBuyer = {
+    userId: string;
     userName: string;
     userPhoto?: string;
     ticketCount: number;
-    timestamp: number; // For sorting
+}
+
+const getTrophy = (rank: number) => {
+    switch (rank) {
+        case 0: return <Trophy className="w-8 h-8 text-yellow-400" />;
+        case 1: return <Trophy className="w-8 h-8 text-gray-400" />;
+        case 2: return <Trophy className="w-8 h-8 text-yellow-700" />;
+        default: return null;
+    }
 }
 
 export function RecentPurchases({ tickets }: RecentPurchasesProps) {
-    const [visiblePurchases, setVisiblePurchases] = useState<Purchase[]>([]);
-
-    const recentPurchases = useMemo(() => {
+    const topBuyers = useMemo(() => {
         if (!tickets || tickets.length === 0) {
             return [];
         }
 
-        const purchasesMap = new Map<string, Purchase>();
-
-        // We need to simulate a purchase time. We'll use the ticket number for that.
-        // In a real scenario, this would come from a `purchaseDate` field.
-        const soldTickets = tickets.filter(t => t.isSold && t.purchaseId && t.userId && t.userName);
+        const buyerCounts = new Map<string, TopBuyer>();
+        const soldTickets = tickets.filter(t => t.isSold && t.userId && t.userName);
 
         soldTickets.forEach(ticket => {
-            if (purchasesMap.has(ticket.purchaseId!)) {
-                const purchase = purchasesMap.get(ticket.purchaseId!)!;
-                purchase.ticketCount += 1;
+            if (buyerCounts.has(ticket.userId!)) {
+                const buyer = buyerCounts.get(ticket.userId!)!;
+                buyer.ticketCount += 1;
             } else {
-                purchasesMap.set(ticket.purchaseId!, {
-                    purchaseId: ticket.purchaseId!,
+                buyerCounts.set(ticket.userId!, {
+                    userId: ticket.userId!,
                     userName: ticket.userName!,
                     userPhoto: ticket.userPhoto,
                     ticketCount: 1,
-                    timestamp: ticket.ticketNumber, // Using ticket number as a mock timestamp
                 });
             }
         });
 
-        return Array.from(purchasesMap.values())
-            .sort((a, b) => b.timestamp - a.timestamp) // Sort by "time"
-            .slice(0, 5); // Take the 5 most recent
+        return Array.from(buyerCounts.values())
+            .sort((a, b) => b.ticketCount - a.ticketCount)
+            .slice(0, 3);
 
     }, [tickets]);
 
-    useEffect(() => {
-        if (recentPurchases.length === 0) return;
-
-        // Animate the purchases appearing one by one
-        const interval = setInterval(() => {
-            setVisiblePurchases(prev => {
-                if (prev.length < recentPurchases.length) {
-                    return [...prev, recentPurchases[prev.length]];
-                }
-                clearInterval(interval);
-                return prev;
-            });
-        }, 500); // Stagger the appearance of each item
-
-        return () => clearInterval(interval);
-    }, [recentPurchases]);
-
-
     const soldTicketsCount = useMemo(() => tickets.filter(t => t.isSold).length, [tickets]);
 
-    if (soldTicketsCount === 0) {
-        return null; // Don't render if no tickets have been sold yet
+    if (soldTicketsCount === 0 || topBuyers.length === 0) {
+        return null;
     }
 
     return (
         <Card className="bg-card/30 border-border backdrop-blur-sm w-full shadow-lg shadow-black/20">
             <CardHeader>
                 <CardTitle className="font-headline text-3xl text-center text-primary flex items-center justify-center gap-2">
-                    <ShoppingCart className="w-8 h-8 animate-pulse" /> Últimos Compradores
+                    <Trophy className="w-8 h-8 animate-pulse" /> Ranking de Compradores
                 </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 p-4">
-                {visiblePurchases.length > 0 ? visiblePurchases.map((purchase, index) => (
-                    <div 
-                        key={purchase.purchaseId} 
+            <CardContent className="space-y-4 p-4">
+                {topBuyers.map((buyer, index) => (
+                    <div
+                        key={buyer.userId}
                         className={cn(
-                            "flex items-center justify-between bg-card/50 p-3 rounded-lg transition-all duration-500 transform opacity-0 animate-fade-in"
+                            "flex items-center justify-between bg-card/50 p-3 rounded-lg transition-all duration-500 transform animate-fade-in",
+                            index === 0 && 'border-2 border-yellow-400 shadow-yellow-400/20 shadow-lg',
+                            index === 1 && 'border border-gray-400',
+                            index === 2 && 'border border-yellow-700'
                         )}
-                        style={{animationDelay: `${index * 100}ms`}}
+                        style={{animationDelay: `${index * 150}ms`}}
                     >
-                        <div className="flex items-center gap-3">
-                            <Avatar className="w-10 h-10 border-2 border-primary/50">
-                                <AvatarImage src={purchase.userPhoto} alt={purchase.userName} />
-                                <AvatarFallback>{purchase.userName.charAt(0)}</AvatarFallback>
+                        <div className="flex items-center gap-4">
+                            <span className="text-3xl font-bold w-8 text-center">{getTrophy(index)}</span>
+                            <Avatar className="w-12 h-12 border-2 border-primary/50">
+                                <AvatarImage src={buyer.userPhoto} alt={buyer.userName} />
+                                <AvatarFallback>{buyer.userName.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <p>
-                                <span className="font-bold text-white">{purchase.userName}</span>
-                                <span className="text-sm text-muted-foreground"> acabou de comprar</span>
-                            </p>
+                            <div>
+                                <p className="font-bold text-white text-lg">{buyer.userName}</p>
+                                <p className="text-sm text-muted-foreground">{buyer.ticketCount} números comprados</p>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                           <span className="font-bold text-primary text-lg bg-primary/20 px-3 py-1 rounded-full">{purchase.ticketCount} {purchase.ticketCount > 1 ? 'números' : 'número'}</span>
-                        </div>
+                        <span className="font-bold text-primary text-xl bg-primary/20 px-4 py-2 rounded-full">
+                            {buyer.ticketCount}
+                        </span>
                     </div>
-                )) : (
-                     <p className="text-center text-muted-foreground py-4">Acompanhe as compras em tempo real!</p>
-                 )}
+                ))}
             </CardContent>
         </Card>
     );
