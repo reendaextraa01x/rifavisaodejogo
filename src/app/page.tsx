@@ -264,13 +264,18 @@ export default function Home() {
           </p>
         </header>
 
-        <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
-            Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
-          </h2>
-          <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
-          <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
-        </section>
+        <div className="relative w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <Image src="https://i.imgur.com/vI32GfC.png" alt="Folha de monstera" width={150} height={150} className="absolute -top-12 -left-16 opacity-50 -rotate-45" data-ai-hint="leaf" />
+          <Image src="https://i.imgur.com/vI32GfC.png" alt="Folha de monstera" width={120} height={120} className="absolute -bottom-12 -right-12 opacity-40 rotate-[120deg]" data-ai-hint="leaf" />
+          <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
+            <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
+              Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
+            </h2>
+            <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
+            <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
+          </section>
+        </div>
+
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <SlothAnalysis tickets={tickets || []} />
