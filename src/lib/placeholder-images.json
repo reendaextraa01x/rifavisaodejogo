@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "logo",
+      "description": "Visão de Jogo Logo",
+      "imageUrl": "https://i.imgur.com/iY4YsxL.png",
+      "imageHint": "logo"
+    },
+    {
+      "id": "leaf-1",
+      "description": "Folha de monstera",
+      "imageUrl": "https://i.imgur.com/vI32GfC.png",
+      "imageHint": "leaf"
+    },
+    {
+      "id": "leaf-2",
+      "description": "Folha de monstera",
+      "imageUrl": "https://i.imgur.com/vI32GfC.png",
+      "imageHint": "leaf"
+    }
+  ]
 }

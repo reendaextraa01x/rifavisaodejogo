@@ -29,6 +29,7 @@ import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
 import { SlothAnalysis } from "@/components/raffle/sloth-analysis";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ImagePlaceholders } from "@/lib/placeholder-images";
 
 type RaffleTicket = {
   id: string;
@@ -253,7 +254,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src="https://i.imgur.com/iY4YsxL.png" alt="Visão de Jogo Logo" width={224} height={224} className="md:w-56 md:h-56 w-48 h-48" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={224} height={224} className="md:w-56 md:h-56 w-48 h-48" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -263,8 +264,8 @@ export default function Home() {
         </header>
 
         <div className="relative w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <Image src="https://i.imgur.com/vI32GfC.png" alt="Folha de monstera" width={150} height={150} className="absolute -top-12 -left-16 opacity-50 -rotate-45" data-ai-hint="leaf" />
-          <Image src="https://i.imgur.com/vI32GfC.png" alt="Folha de monstera" width={120} height={120} className="absolute -bottom-12 -right-12 opacity-40 rotate-[120deg]" data-ai-hint="leaf" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'leaf-1')?.imageUrl || ''} alt="Folha de monstera" width={150} height={150} className="absolute -top-12 -left-16 opacity-50 -rotate-45" data-ai-hint="leaf" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'leaf-2')?.imageUrl || ''} alt="Folha de monstera" width={120} height={120} className="absolute -bottom-12 -right-12 opacity-40 rotate-[120deg]" data-ai-hint="leaf" />
           <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
             <h2 className="text-2xl font-bold mb-4 font-headline tracking-wider">
               Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
@@ -405,3 +406,5 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
