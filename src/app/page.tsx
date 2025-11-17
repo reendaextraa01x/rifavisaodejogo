@@ -55,18 +55,24 @@ export default function Home() {
   const { user, isUserLoading } = useUser();
 
   const tickets: RaffleTicket[] = useMemo(() => {
-      const generatedTickets: RaffleTicket[] = [];
-      for (let i = 1; i <= totalNumbers; i++) {
-          generatedTickets.push({
-              id: `ticket-${i}`,
-              raffleId: "main-raffle",
-              ticketNumber: i,
-              isSold: i <= initialSoldCount,
-              userId: i <= initialSoldCount ? `user_${i % 10}` : undefined,
-              userName: i <= initialSoldCount ? `Comprador ${i % 10}` : undefined,
-          });
-      }
-      return generatedTickets;
+    const soldNumbers = new Set<number>();
+    while (soldNumbers.size < initialSoldCount) {
+      soldNumbers.add(Math.floor(Math.random() * totalNumbers) + 1);
+    }
+
+    const generatedTickets: RaffleTicket[] = [];
+    for (let i = 1; i <= totalNumbers; i++) {
+      const isSold = soldNumbers.has(i);
+      generatedTickets.push({
+        id: `ticket-${i}`,
+        raffleId: "main-raffle",
+        ticketNumber: i,
+        isSold: isSold,
+        userId: isSold ? `user_${i % 10}` : undefined,
+        userName: isSold ? `Comprador ${i % 10}` : undefined,
+      });
+    }
+    return generatedTickets;
   }, [initialSoldCount]);
   const ticketsLoading = false;
 
@@ -200,7 +206,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <SlothMascot className="w-48 h-auto md:w-56" />
+          <Image src="https://i.imgur.com/iY4YsxL.png" alt="Visão de Jogo Logo" width={224} height={224} className="md:w-56 md:h-56 w-48 h-48" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -270,7 +276,7 @@ export default function Home() {
         )}
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
-          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen}>
+          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
               <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
                 Números da Sorte
