@@ -49,6 +49,7 @@ export default function Home() {
   const { user, isUserLoading } = useUser();
 
   const [ticketQuantity, setTicketQuantity] = useState(1);
+  const [chosenNumber, setChosenNumber] = useState('');
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isTicketsOpen, setIsTicketsOpen] = useState(true);
@@ -60,7 +61,7 @@ export default function Home() {
 
   const { data: tickets, isLoading: ticketsLoading } = useCollection<RaffleTicket>(ticketsQuery);
 
-  const { soldCount, availableCount, percentageSold } = useMemo(() => {
+  const { soldCount, availableCount, percentageSold, soldNumbersSet } = useMemo(() => {
     if (!tickets) {
       const percentageToFill = 87.63;
       const initialSoldCount = Math.floor((totalNumbers * percentageToFill) / 100);
@@ -68,19 +69,46 @@ export default function Home() {
         soldCount: initialSoldCount,
         availableCount: totalNumbers - initialSoldCount,
         percentageSold: percentageToFill,
+        soldNumbersSet: new Set(),
       };
     }
-    const sold = tickets.filter(t => t.isSold).length;
+    const sold = tickets.filter(t => t.isSold);
+    const soldNumbers = new Set(sold.map(t => t.ticketNumber));
     return {
-      soldCount: sold,
-      availableCount: totalNumbers - sold,
-      percentageSold: (sold / totalNumbers) * 100,
+      soldCount: sold.length,
+      availableCount: totalNumbers - sold.length,
+      percentageSold: (sold.length / totalNumbers) * 100,
+      soldNumbersSet: soldNumbers,
     };
   }, [tickets]);
 
+  useEffect(() => {
+    if (chosenNumber) {
+      setTicketQuantity(1);
+    }
+  }, [chosenNumber]);
+
 
   const handleBuyClick = () => {
-    if (ticketQuantity > availableCount) {
+    if (chosenNumber) {
+      const num = parseInt(chosenNumber);
+      if (isNaN(num) || num < 1 || num > 500) {
+        toast({
+          variant: "destructive",
+          title: "Número inválido",
+          description: "Por favor, escolha um número entre 001 e 500.",
+        });
+        return;
+      }
+      if (soldNumbersSet.has(num)) {
+        toast({
+          variant: "destructive",
+          title: "Número indisponível",
+          description: `O número ${chosenNumber.padStart(3,'0')} já foi vendido.`,
+        });
+        return;
+      }
+    } else if (ticketQuantity > availableCount) {
       toast({
         variant: "destructive",
         title: "Oh no! Ingressos insuficientes.",
@@ -120,37 +148,40 @@ export default function Home() {
         throw new Error("Firestore not initialized");
       }
 
-      const availableTicketsQuery = query(
-        collection(firestore, "raffleTickets"),
-        where("raffleId", "==", "main-raffle"),
-        where("isSold", "==", false)
-      );
-      
-      const availableTicketsSnapshot = await getDocs(availableTicketsQuery);
-      const availableTickets = availableTicketsSnapshot.docs.slice(0, ticketQuantity);
-
-      if (availableTickets.length < ticketQuantity) {
-        throw new Error("Não há números suficientes disponíveis.");
-      }
-
       const batch = writeBatch(firestore);
       const purchaseId = `purchase_${Date.now()}`;
+      const quantityToBuy = chosenNumber ? 1 : ticketQuantity;
+      
       const newPurchase = {
         id: purchaseId,
         raffleId: "main-raffle",
         userId: currentUser.uid,
         purchaseDate: new Date().toISOString(),
-        numberOfTickets: ticketQuantity,
-        totalAmount: ticketQuantity * 1,
+        numberOfTickets: quantityToBuy,
+        totalAmount: quantityToBuy * 1,
         paymentMethod: "PIX",
         paymentStatus: "completed",
       };
 
       const purchaseRef = collection(firestore, `users/${currentUser.uid}/purchases`);
       batch.set(doc(purchaseRef, purchaseId), newPurchase);
-
+      
       const boughtNumbers: number[] = [];
-      availableTickets.forEach(ticketDoc => {
+
+      if (chosenNumber) {
+        const numToBuy = parseInt(chosenNumber);
+        const ticketQuery = query(
+          collection(firestore, "raffleTickets"),
+          where("raffleId", "==", "main-raffle"),
+          where("ticketNumber", "==", numToBuy),
+          where("isSold", "==", false)
+        );
+        const ticketSnapshot = await getDocs(ticketQuery);
+
+        if (ticketSnapshot.empty) {
+          throw new Error(`O número ${chosenNumber.padStart(3,'0')} não está mais disponível.`);
+        }
+        const ticketDoc = ticketSnapshot.docs[0];
         const ticketRef = doc(firestore, "raffleTickets", ticketDoc.id);
         batch.update(ticketRef, {
           isSold: true,
@@ -160,13 +191,38 @@ export default function Home() {
           userPhoto: currentUser.photoURL || undefined,
         });
         boughtNumbers.push(ticketDoc.data().ticketNumber);
-      });
+      } else {
+        const availableTicketsQuery = query(
+          collection(firestore, "raffleTickets"),
+          where("raffleId", "==", "main-raffle"),
+          where("isSold", "==", false)
+        );
+        
+        const availableTicketsSnapshot = await getDocs(availableTicketsQuery);
+        const availableTickets = availableTicketsSnapshot.docs.slice(0, quantityToBuy);
+
+        if (availableTickets.length < quantityToBuy) {
+          throw new Error("Não há números suficientes disponíveis.");
+        }
+
+        availableTickets.forEach(ticketDoc => {
+          const ticketRef = doc(firestore, "raffleTickets", ticketDoc.id);
+          batch.update(ticketRef, {
+            isSold: true,
+            purchaseId: purchaseId,
+            userId: currentUser.uid,
+            userName: currentUser.displayName || "Anônimo",
+            userPhoto: currentUser.photoURL || undefined,
+          });
+          boughtNumbers.push(ticketDoc.data().ticketNumber);
+        });
+      }
 
       await batch.commit();
 
       toast({
         title: "Pagamento confirmado!",
-        description: `Você comprou ${ticketQuantity} número(s): ${boughtNumbers.join(', ')}`,
+        description: `Você comprou ${quantityToBuy} número(s): ${boughtNumbers.map(n => String(n).padStart(3, '0')).join(', ')}`,
       });
 
     } catch (error: any) {
@@ -179,6 +235,7 @@ export default function Home() {
     } finally {
       setIsProcessing(false);
       setIsPaymentDialogOpen(false);
+      setChosenNumber('');
     }
   };
 
@@ -219,20 +276,6 @@ export default function Home() {
           <SlothAnalysis tickets={tickets || []} />
         </section>
         
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
-          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
-            <CollapsibleTrigger asChild>
-              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
-                Ver Números da Sorte
-                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
-              </button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
-            </CollapsibleContent>
-          </Collapsible>
-        </section>
-
         <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
@@ -241,8 +284,9 @@ export default function Home() {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors" 
+                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
                           onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}
+                          disabled={!!chosenNumber}
                         >
                           <Minus className="w-8 h-8" />
                         </Button>
@@ -255,14 +299,28 @@ export default function Home() {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors" 
+                          className="h-14 w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
                           onClick={() => setTicketQuantity(ticketQuantity + 1)}
+                          disabled={!!chosenNumber}
                         >
                           <Plus className="w-8 h-8" />
                         </Button>
                     </div>
+
+                    <div className="space-y-2">
+                        <label htmlFor="chosenNumber" className="text-lg font-headline tracking-wider text-muted-foreground">Ou escolha seu número (opcional):</label>
+                        <Input
+                          id="chosenNumber"
+                          type="number"
+                          placeholder="Ex: 007"
+                          className="max-w-xs mx-auto text-center text-xl"
+                          value={chosenNumber}
+                          onChange={(e) => setChosenNumber(e.target.value)}
+                        />
+                    </div>
+                    
                     <p className="text-5xl font-headline text-primary tracking-widest">
-                      Total: R$ {(ticketQuantity * 1).toFixed(2).replace('.', ',')}
+                      Total: R$ {(chosenNumber ? 1 : ticketQuantity * 1).toFixed(2).replace('.', ',')}
                     </p>
                     <Button 
                       size="lg" 
@@ -273,6 +331,20 @@ export default function Home() {
                     </Button>
                 </div>
             </div>
+        </section>
+
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-center font-headline text-4xl text-center my-4 text-white hover:text-primary transition-colors">
+                Ver Números da Sorte
+                <ChevronDown className={`ml-2 h-8 w-8 transition-transform duration-300 ${isTicketsOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <RaffleTicketsGrid tickets={tickets || []} isLoading={ticketsLoading} />
+            </CollapsibleContent>
+          </Collapsible>
         </section>
 
         {user && (
@@ -330,3 +402,5 @@ export default function Home() {
       </Dialog>
     </div>
   );
+
+    
