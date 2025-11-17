@@ -26,7 +26,7 @@ import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useUser } from "@/firebase/provider";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
-import { RecentPurchases } from "@/components/raffle/recent-purchases";
+import { BonusNumber } from "@/components/raffle/bonus-number";
 import { SlothMascot } from "@/components/icons/sloth-mascot";
 
 type RaffleTicket = {
@@ -217,7 +217,11 @@ export default function Home() {
           <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
         </section>
 
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <BonusNumber tickets={tickets || []} />
+        </section>
+
+        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <h2 className="font-headline text-4xl text-center mb-6 text-white">Escolha sua sorte 🍀</h2>
             <Card className="bg-card/50 border-primary/30 text-center transition-all duration-300 shadow-lg p-6 max-w-md mx-auto">
               <CardContent className="space-y-4">
@@ -242,7 +246,7 @@ export default function Home() {
             </Card>
         </section>
 
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
             <h2 className="font-headline text-4xl text-center mb-6 text-white">Combos com Desconto 🔥</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {pricingOptions.map((option, index) => (
@@ -260,12 +264,12 @@ export default function Home() {
         </section>
         
         {user && (
-          <section className="w-full animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
             <MyTickets userId={user.uid} />
           </section>
         )}
 
-        <section className="w-full animate-fade-in" style={{ animationDelay: '1s' }}>
+        <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen}>
             <CollapsibleTrigger asChild>
               <button className="w-full flex items-center justify-center font-headline text-4xl text-center mb-6 text-white hover:text-primary transition-colors">
@@ -278,11 +282,6 @@ export default function Home() {
             </CollapsibleContent>
           </Collapsible>
         </section>
-
-        <section className="w-full animate-fade-in" style={{ animationDelay: '1.2s' }}>
-            <RecentPurchases tickets={tickets || []} />
-        </section>
-
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '1.4s' }}>
             <Card className="bg-card/30 border-border backdrop-blur-sm">
