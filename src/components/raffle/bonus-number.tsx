@@ -39,12 +39,12 @@ export function BonusNumberClaim({ number, isOpen, onClose }: BonusNumberProps) 
                         Parabéns! Você tirou a sorte grande com o número <span className="font-bold text-yellow-400">{String(number).padStart(3, '0')}</span>!
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-col items-center space-y-4 py-4 z-10">
+                <div className="flex flex-col items-center space-y-4 py-4 z-10 min-h-[250px] justify-center">
                     <div 
-                      className={cn("relative transition-all duration-500 ease-in-out", isClaimed ? 'scale-0 opacity-0' : 'scale-100 opacity-100')}
+                      className={cn("absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 ease-in-out", isClaimed ? 'scale-0 opacity-0' : 'scale-100 opacity-100')}
                       style={{ perspective: '1000px' }}
                     >
-                      <button onClick={handleClaim} className="group">
+                      <button onClick={handleClaim} className="group flex flex-col items-center">
                         <Gift className="w-32 h-32 text-yellow-400 group-hover:animate-bounce" />
                         <p className="text-center font-bold text-white mt-2">Clique para abrir!</p>
                       </button>
@@ -72,16 +72,17 @@ export function BonusNumberClaim({ number, isOpen, onClose }: BonusNumberProps) 
                 
                 {isClaimed && (
                   <div className="absolute inset-0 pointer-events-none">
-                    {[...Array(20)].map((_, i) => (
+                    {[...Array(30)].map((_, i) => (
                       <div
                         key={i}
-                        className="absolute bg-primary rounded-full animate-fall"
+                        className="absolute rounded-full animate-fall"
                         style={{
                           left: `${Math.random() * 100}%`,
-                          width: `${Math.random() * 6 + 4}px`,
-                          height: `${Math.random() * 6 + 4}px`,
+                          width: `${Math.random() * 8 + 5}px`,
+                          height: `${Math.random() * 8 + 5}px`,
+                          background: `hsl(${Math.random() * 60 + 30}, 100%, 50%)`,
                           animationDelay: `${Math.random() * 0.5}s`,
-                          animationDuration: `${Math.random() * 2 + 1}s`,
+                          animationDuration: `${Math.random() * 2 + 1.5}s`,
                           opacity: 0,
                         }}
                       />
@@ -93,3 +94,4 @@ export function BonusNumberClaim({ number, isOpen, onClose }: BonusNumberProps) 
     );
 }
 
+    

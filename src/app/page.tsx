@@ -272,7 +272,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={80} height={80} className="md:w-20 md:h-20 w-20 h-20" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={80} height={80} className="md:w-20 md:h-20 w-16 h-16" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -282,7 +282,7 @@ export default function Home() {
         </header>
 
         <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <section className="w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
+          <section className="relative w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
             <h2 className="text-xl md:text-2xl font-bold mb-4 font-headline tracking-wider">
               Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-2xl md:text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
             </h2>
@@ -431,3 +431,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
