@@ -273,7 +273,7 @@ export default function Home() {
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
           <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={50} height={50} className="md:w-14 md:h-14 w-12 h-12" data-ai-hint="logo" />
-          <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+          <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_4px_12px_hsl(var(--primary)/0.6)]">
             RIFA VISÃO DE JOGO
           </h1>
           <p className="text-2xl md:text-4xl font-headline text-primary drop-shadow-[0_2px_8px_hsl(var(--primary)/0.8)] flex items-center gap-x-2">
@@ -448,4 +448,3 @@ export default function Home() {
       )}
     </div>
   );
-}
