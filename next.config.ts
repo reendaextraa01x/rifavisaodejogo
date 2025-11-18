@@ -52,6 +52,7 @@ pathname: '/**',
   experimental: {},
   allowedDevOrigins: [
     'https://*.cloudworkstations.dev',
+    'https://6000-firebase-studio-1763396639649.cluster-57i2ylwve5fskth4xb2kui2ow2.cloudworkstations.dev',
   ],
 };
 
