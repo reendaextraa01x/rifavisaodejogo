@@ -32,7 +32,7 @@ export function MyTickets({ userId }: MyTicketsProps) {
   const { data: myTickets, isLoading } = useCollection<RaffleTicket>(myTicketsQuery);
 
   const sortedTickets = useMemo(() => {
-    return myTickets?.sort((a, b) => a.ticketNumber - b.ticketNumber) || [];
+    return myTickets?.sort((a: RaffleTicket, b: RaffleTicket) => a.ticketNumber - b.ticketNumber) || [];
   }, [myTickets]);
 
   if (isLoading) {
@@ -71,5 +71,3 @@ export function MyTickets({ userId }: MyTicketsProps) {
     </Card>
   );
 }
-
-    
