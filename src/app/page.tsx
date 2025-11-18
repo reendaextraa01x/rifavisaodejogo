@@ -276,8 +276,8 @@ export default function Home() {
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
-          <p className="text-xl md:text-3xl font-headline text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] flex items-center gap-x-2">
-            💸 <span className="text-4xl md:text-6xl text-primary font-bold drop-shadow-[0_4px_4px_rgba(0,255,100,0.3)]">R$2.500</span> NO PIX + CAMISA 💸
+          <p className="text-2xl md:text-4xl font-headline text-primary drop-shadow-[0_2px_8px_hsl(var(--primary)/0.8)] flex items-center gap-x-2">
+            💸 R$2.500 NO PIX + CAMISA 💸
           </p>
         </header>
 
@@ -449,5 +449,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
