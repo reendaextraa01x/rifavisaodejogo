@@ -28,7 +28,6 @@ import { useUser } from "@/firebase/provider";
 import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
 import { SlothAnalysis } from "@/components/raffle/sloth-analysis";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImagePlaceholders } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
 
@@ -255,7 +254,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={140} height={140} className="md:w-36 md:h-36 w-32 h-32" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={120} height={120} className="md:w-28 md:h-28 w-24 h-24" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
