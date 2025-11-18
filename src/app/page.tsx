@@ -276,7 +276,10 @@ export default function Home() {
           <h1 className="pt-2 font-headline text-5xl md:text-7xl text-center tracking-wider bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-300 bg-clip-text text-transparent drop-shadow-[0_4px_12px_hsl(var(--primary)/0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
-          <p className="text-2xl md:text-4xl font-headline text-primary drop-shadow-[0_2px_8px_hsl(var(--primary)/0.8)] flex items-center gap-x-2">
+          <p 
+            className="text-xl md:text-3xl font-headline text-primary flex items-center gap-x-3 bg-black/50 border border-primary/50 rounded-full px-6 py-2 backdrop-blur-sm"
+            style={{ textShadow: '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary))' }}
+          >
             💸 R$2.500 NO PIX + CAMISA 💸
           </p>
         </header>
@@ -449,3 +452,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
