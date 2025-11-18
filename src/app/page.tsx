@@ -296,78 +296,81 @@ export default function Home() {
           <SlothAnalysis tickets={tickets || []} />
         </section>
         
-        <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
-                 <h2 className="font-headline text-4xl md:text-5xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                    O PRÊMIO QUE VAI MUDAR SEU JOGO
-                </h2>
-                <Image 
-                    src={ImagePlaceholders.find(p => p.id === 'prizeImage')?.imageUrl || ''}
-                    alt="Prêmio da Rifa"
-                    width={500}
-                    height={500}
-                    className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square mt-4"
-                    data-ai-hint="prize money"
-                />
-                <p className="text-lg text-gray-300 max-w-md drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pt-4">
-                    Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
-                </p>
-            </div>
-            <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
-                <div className="space-y-6">
-                    <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
-                    <div className="flex items-center justify-center space-x-2 sm:space-x-4">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
-                          onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}
-                          disabled={!!chosenNumber}
-                        >
-                          <Minus className="w-6 h-6 sm:w-8 sm:h-8" />
-                        </Button>
-                        
-                        <div className="relative w-28 sm:w-40 h-20 sm:h-24 flex items-center justify-center">
-                          <div className="absolute inset-0 bg-black/20 rounded-xl border border-primary/30 backdrop-blur-sm"></div>
-                          <span className="relative text-6xl sm:text-7xl font-bold text-white drop-shadow-lg">{ticketQuantity}</span>
-                        </div>
+        <section className="w-full animate-fade-in my-8 rounded-2xl border-2 border-primary/30 p-4 md:p-8 relative bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.9)_70%)] animate-glow" style={{ animationDelay: '0.8s' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
+                   <h2 className="font-headline text-4xl md:text-5xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                      O PRÊMIO QUE VAI MUDAR SEU JOGO
+                  </h2>
+                  <Image 
+                      src={ImagePlaceholders.find(p => p.id === 'prizeImage')?.imageUrl || ''}
+                      alt="Prêmio da Rifa"
+                      width={500}
+                      height={500}
+                      className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square mt-4"
+                      data-ai-hint="prize money"
+                  />
+                  <p className="text-lg text-gray-300 max-w-md drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pt-4">
+                      Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
+                  </p>
+              </div>
+              <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm">
+                  <div className="space-y-6">
+                      <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
+                      <div className="flex items-center justify-center space-x-2 sm:space-x-4">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
+                            onClick={() => setTicketQuantity(Math.max(1, ticketQuantity - 1))}
+                            disabled={!!chosenNumber}
+                          >
+                            <Minus className="w-6 h-6 sm:w-8 sm:h-8" />
+                          </Button>
+                          
+                          <div className="relative w-28 sm:w-40 h-20 sm:h-24 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-black/20 rounded-xl border border-primary/30 backdrop-blur-sm"></div>
+                            <span className="relative text-6xl sm:text-7xl font-bold text-white drop-shadow-lg">{ticketQuantity}</span>
+                          </div>
 
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
-                          onClick={() => setTicketQuantity(ticketQuantity + 1)}
-                          disabled={!!chosenNumber}
-                        >
-                          <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
-                        </Button>
-                    </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-12 w-12 sm:h-14 sm:w-14 rounded-full text-white bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-50" 
+                            onClick={() => setTicketQuantity(ticketQuantity + 1)}
+                            disabled={!!chosenNumber}
+                          >
+                            <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
+                          </Button>
+                      </div>
 
-                    <div className="space-y-2">
-                        <label htmlFor="chosenNumber" className="text-md sm:text-lg font-headline tracking-wider text-muted-foreground">Ou escolha seu número (opcional):</label>
-                        <Input
-                          id="chosenNumber"
-                          type="number"
-                          placeholder="Ex: 007"
-                          className="max-w-[200px] sm:max-w-xs mx-auto text-center text-lg sm:text-xl"
-                          value={chosenNumber}
-                          onChange={(e) => setChosenNumber(e.target.value)}
-                        />
-                    </div>
-                    
-                    <p className="text-4xl sm:text-5xl font-headline text-primary tracking-widest">
-                      Total: R$ {(chosenNumber ? 1 : ticketQuantity * 1).toFixed(2).replace('.', ',')}
-                    </p>
-                    <Button 
-                      size="lg" 
-                      className="bg-gradient-to-r from-green-500 to-lime-400 hover:from-green-600 hover:to-lime-500 text-black font-bold text-xl sm:text-2xl py-6 sm:py-8 px-8 sm:px-10 rounded-full shadow-lg w-full transform transition-transform hover:scale-105"
-                      onClick={handleBuyClick}
-                    >
-                        COMPRAR AGORA
-                    </Button>
-                </div>
-            </div>
+                      <div className="space-y-2">
+                          <label htmlFor="chosenNumber" className="text-md sm:text-lg font-headline tracking-wider text-muted-foreground">Ou escolha seu número (opcional):</label>
+                          <Input
+                            id="chosenNumber"
+                            type="number"
+                            placeholder="Ex: 007"
+                            className="max-w-[200px] sm:max-w-xs mx-auto text-center text-lg sm:text-xl"
+                            value={chosenNumber}
+                            onChange={(e) => setChosenNumber(e.target.value)}
+                          />
+                      </div>
+                      
+                      <p className="text-4xl sm:text-5xl font-headline text-primary tracking-widest">
+                        Total: R$ {(chosenNumber ? 1 : ticketQuantity * 1).toFixed(2).replace('.', ',')}
+                      </p>
+                      <Button 
+                        size="lg" 
+                        className="bg-gradient-to-r from-green-500 to-lime-400 hover:from-green-600 hover:to-lime-500 text-black font-bold text-xl sm:text-2xl py-6 sm:py-8 px-8 sm:px-10 rounded-full shadow-lg w-full transform transition-transform hover:scale-105"
+                        onClick={handleBuyClick}
+                      >
+                          COMPRAR AGORA
+                      </Button>
+                  </div>
+              </div>
+          </div>
         </section>
+
 
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
@@ -446,3 +449,5 @@ export default function Home() {
       )}
     </div>
   );
+
+    
