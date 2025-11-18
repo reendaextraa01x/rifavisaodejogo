@@ -108,30 +108,41 @@ export function RaffleTicketsGrid({ tickets, isLoading }: RaffleTicketsGridProps
     }
     
     return (
-        <Card className="bg-transparent border-none p-2 sm:p-4">
-            <CardContent className="p-2">
-                <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-10 lg:grid-cols-10 gap-1 sm:gap-2">
-                    {numbersToShow.map(number => {
-                        const ticket = ticketStatusMap.get(number);
-                        const isSold = ticket?.isSold || false;
-
-                        return (
-                            <TicketNumber key={number} number={number} isSold={isSold} />
-                        );
-                    })}
-                </div>
-            </CardContent>
-            <div className="flex items-center justify-center mt-4 space-x-4">
-                <Button onClick={() => setCurrentPage(p => p - 1)} disabled={currentPage === 1} variant="ghost">
-                    <ChevronLeft className="mr-2 h-5 w-5" /> Anterior
-                </Button>
-                <span className="font-bold text-muted-foreground">
-                    {`Mostrando ${numbersToShow[0]}-${numbersToShow[numbersToShow.length - 1]}`}
-                </span>
-                <Button onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage === totalPages} variant="ghost">
-                    Próximo <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
+        <div className="relative overflow-hidden">
+            <div 
+                className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(255,255,255,0.1)_0%,_transparent_60%)]"
+                style={{ pointerEvents: 'none' }}
+            >
+                <div className="smoke" style={{ animationDelay: '0s' }}></div>
+                <div className="smoke" style={{ animationDelay: '2s', width: '150px', height: '150px', right: '20%', left: 'auto' }}></div>
+                <div className="smoke" style={{ animationDelay: '4s', width: '250px', height: '250px' }}></div>
+                <div className="smoke" style={{ animationDelay: '6s', width: '100px', height: '100px', right: 'auto', left: '20%' }}></div>
             </div>
-        </Card>
+            <Card className="bg-transparent border-none p-2 sm:p-4">
+                <CardContent className="p-2 relative z-10">
+                    <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-10 lg:grid-cols-10 gap-1 sm:gap-2">
+                        {numbersToShow.map(number => {
+                            const ticket = ticketStatusMap.get(number);
+                            const isSold = ticket?.isSold || false;
+
+                            return (
+                                <TicketNumber key={number} number={number} isSold={isSold} />
+                            );
+                        })}
+                    </div>
+                </CardContent>
+                <div className="flex items-center justify-center mt-4 space-x-4 relative z-10">
+                    <Button onClick={() => setCurrentPage(p => p - 1)} disabled={currentPage === 1} variant="ghost">
+                        <ChevronLeft className="mr-2 h-5 w-5" /> Anterior
+                    </Button>
+                    <span className="font-bold text-muted-foreground">
+                        {`Mostrando ${numbersToShow[0]}-${numbersToShow[numbersToShow.length - 1]}`}
+                    </span>
+                    <Button onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage === totalPages} variant="ghost">
+                        Próximo <ChevronRight className="ml-2 h-5 w-5" />
+                    </Button>
+                </div>
+            </Card>
+        </div>
     );
 }
