@@ -7,30 +7,34 @@ import { getFirestore, doc } from 'firebase/firestore'
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
-  if (!getApps().length) {
-    // Important! initializeApp() is called without any arguments because Firebase App Hosting
-    // integrates with the initializeApp() function to provide the environment variables needed to
-    // populate the FirebaseOptions in production. It is critical that we attempt to call initializeApp()
-    // without arguments.
-    let firebaseApp;
-    try {
-      // Attempt to initialize via Firebase App Hosting environment variables
-      firebaseApp = initializeApp();
-    } catch (e) {
-      // Only warn in production because it's normal to use the firebaseConfig to initialize
-      // during development
-      if (process.env.NODE_ENV === "production") {
-        console.warn('Automatic initialization failed. Falling back to firebase config object.', e);
-      }
-      firebaseApp = initializeApp(firebaseConfig);
-    }
+  if (getApps().length) {
+    return getSdks(getApp());
+  }
 
+  // In environments like Vercel, automatic initialization will fail because
+  // it's not a Firebase Hosting environment. We must rely on the explicit config.
+  // We prioritize the explicit config if it exists and seems valid.
+  if (firebaseConfig && firebaseConfig.projectId) {
+    const firebaseApp = initializeApp(firebaseConfig);
     return getSdks(firebaseApp);
   }
 
-  // If already initialized, return the SDKs with the already initialized App
-  return getSdks(getApp());
+  // Fallback for Firebase Hosting environments where config is injected automatically.
+  try {
+    const firebaseApp = initializeApp();
+    return getSdks(firebaseApp);
+  } catch (e) {
+    console.error(
+      'Firebase initialization failed. Please check your firebaseConfig object.',
+      e
+    );
+    // If all attempts fail, we cannot proceed.
+    // This will likely cause subsequent errors, which is expected
+    // as Firebase is not configured.
+    throw new Error('Could not initialize Firebase. Please check your configuration.');
+  }
 }
+
 
 export function getSdks(firebaseApp: FirebaseApp) {
   return {
