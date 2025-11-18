@@ -127,31 +127,4 @@
       opacity: 0;
     }
   }
-
-  @keyframes smoke-rise {
-    0% {
-      opacity: 0;
-      transform: translateY(0) scale(1);
-    }
-    50% {
-      opacity: 0.1;
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-200px) scale(2.5);
-    }
-  }
-
-  .smoke {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    background: white;
-    border-radius: 50%;
-    filter: blur(40px);
-    transform: translateX(-50%);
-    animation: smoke-rise 8s infinite linear;
-  }
 }

@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Button } from '../ui/button';
+import { FallingMoney } from '../animations/falling-money';
 
 type RaffleTicket = {
     id: string;
@@ -109,14 +110,8 @@ export function RaffleTicketsGrid({ tickets, isLoading }: RaffleTicketsGridProps
     
     return (
         <div className="relative overflow-hidden">
-            <div 
-                className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(255,255,255,0.1)_0%,_transparent_60%)]"
-                style={{ pointerEvents: 'none' }}
-            >
-                <div className="smoke" style={{ animationDelay: '0s' }}></div>
-                <div className="smoke" style={{ animationDelay: '2s', width: '150px', height: '150px', right: '20%', left: 'auto' }}></div>
-                <div className="smoke" style={{ animationDelay: '4s', width: '250px', height: '250px' }}></div>
-                <div className="smoke" style={{ animationDelay: '6s', width: '100px', height: '100px', right: 'auto', left: '20%' }}></div>
+             <div className="absolute inset-0 z-0">
+                <FallingMoney />
             </div>
             <Card className="bg-transparent border-none p-2 sm:p-4">
                 <CardContent className="p-2 relative z-10">
