@@ -25,11 +25,11 @@ import { useAuth, useCollection, useFirestore, useMemoFirebase } from "@/firebas
 import { collection, query, where, getDocs, writeBatch, doc } from "firebase/firestore";
 import { initiateAnonymousSignIn } from "@/firebase/non-blocking-login";
 import { useUser } from "@/firebase/provider";
-import { RaffleTicketsGrid } from "@/components/raffle/ticket-grid";
+import { RaffleTicketsGrid, GOLDEN_TICKETS } from "@/components/raffle/ticket-grid";
 import { MyTickets } from "@/components/raffle/my-tickets";
 import { SlothAnalysis } from "@/components/raffle/sloth-analysis";
 import { ImagePlaceholders } from "@/lib/placeholder-images";
-import { cn } from "@/lib/utils";
+import { BonusNumberClaim } from "@/components/raffle/bonus-number";
 
 type RaffleTicket = {
   id: string;
@@ -54,6 +54,8 @@ export default function Home() {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isTicketsOpen, setIsTicketsOpen] = useState(true);
+  const [goldenNumberClaim, setGoldenNumberClaim] = useState<number | null>(null);
+
 
   const ticketsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -166,6 +168,8 @@ export default function Home() {
       batch.set(doc(purchaseRef, purchaseId), newPurchase);
       
       const boughtNumbers: number[] = [];
+      let wonGoldenTicket = false;
+      let goldenNumber = null;
 
       if (chosenNumber) {
         const numToBuy = parseInt(chosenNumber);
@@ -190,6 +194,10 @@ export default function Home() {
           userPhoto: currentUser.photoURL || undefined,
         });
         boughtNumbers.push(ticketDoc.data().ticketNumber);
+        if (GOLDEN_TICKETS.has(numToBuy)) {
+          wonGoldenTicket = true;
+          goldenNumber = numToBuy;
+        }
       } else {
         const availableTicketsQuery = query(
           collection(firestore, "raffleTickets"),
@@ -205,6 +213,7 @@ export default function Home() {
         }
 
         availableTickets.forEach(ticketDoc => {
+          const ticketData = ticketDoc.data();
           const ticketRef = doc(firestore, "raffleTickets", ticketDoc.id);
           batch.update(ticketRef, {
             isSold: true,
@@ -213,7 +222,11 @@ export default function Home() {
             userName: currentUser.displayName || "Anônimo",
             userPhoto: currentUser.photoURL || undefined,
           });
-          boughtNumbers.push(ticketDoc.data().ticketNumber);
+          boughtNumbers.push(ticketData.ticketNumber);
+          if (GOLDEN_TICKETS.has(ticketData.ticketNumber) && !wonGoldenTicket) {
+             wonGoldenTicket = true;
+             goldenNumber = ticketData.ticketNumber;
+          }
         });
       }
 
@@ -223,6 +236,11 @@ export default function Home() {
         title: "Pagamento confirmado!",
         description: `Você comprou ${quantityToBuy} número(s): ${boughtNumbers.map(n => String(n).padStart(3, '0')).join(', ')}`,
       });
+
+      if (wonGoldenTicket && goldenNumber) {
+        setGoldenNumberClaim(goldenNumber);
+      }
+
 
     } catch (error: any) {
       console.error("Payment processing error:", error);
@@ -250,11 +268,11 @@ export default function Home() {
   ];
   
   return (
-    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-green-950 to-background text-gray-100 font-body overflow-x-hidden">
+    <div className="flex flex-col items-center min-h-screen w-full bg-gradient-to-b from-black via-green-950 to-background text-gray-100 font-body">
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={100} height={100} className="md:w-24 md:h-24 w-20 h-20" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={80} height={80} className="md:w-20 md:h-20 w-20 h-20" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -402,6 +420,14 @@ export default function Home() {
               </Button>
           </DialogContent>
       </Dialog>
+      
+      {goldenNumberClaim && (
+        <BonusNumberClaim 
+          number={goldenNumberClaim}
+          isOpen={!!goldenNumberClaim}
+          onClose={() => setGoldenNumberClaim(null)} 
+        />
+      )}
     </div>
   );
 }

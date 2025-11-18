@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from 'react';
@@ -22,7 +23,7 @@ interface RaffleTicketsGridProps {
     isLoading: boolean;
 }
 
-const GOLDEN_TICKETS = new Set([7, 22, 55, 88, 101, 123, 150, 177, 200, 222, 250, 283, 300, 333, 377, 400, 450, 488]);
+export const GOLDEN_TICKETS = new Set([7, 22, 55, 88, 101, 123, 150, 177, 200, 222, 250, 283, 300, 333, 377, 400, 450, 488]);
 
 const TicketNumber = ({ number, isSold }: { number: number, isSold: boolean }) => {
   const isGolden = GOLDEN_TICKETS.has(number);

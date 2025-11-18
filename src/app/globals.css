@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -89,6 +90,9 @@
   }
   .animate-glow {
     animation: glow 2s infinite alternate;
+  }
+  .animate-ping-slow {
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
   @keyframes fadeIn {
