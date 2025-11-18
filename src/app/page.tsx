@@ -272,7 +272,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={80} height={80} className="md:w-20 md:h-20 w-16 h-16" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={60} height={60} className="md:w-16 md:h-16 w-14 h-14" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -296,7 +296,17 @@ export default function Home() {
           <SlothAnalysis tickets={tickets || []} />
         </section>
         
-        <section className="w-full text-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
+        <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <div className="w-full h-full flex items-center justify-center">
+                <Image 
+                    src={ImagePlaceholders.find(p => p.id === 'prizeImage')?.imageUrl || ''}
+                    alt="Prêmio da Rifa"
+                    width={500}
+                    height={500}
+                    className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square"
+                    data-ai-hint="prize money"
+                />
+            </div>
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
                     <p className="text-2xl font-headline tracking-wider">Quantos números você quer?</p>
@@ -431,5 +441,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

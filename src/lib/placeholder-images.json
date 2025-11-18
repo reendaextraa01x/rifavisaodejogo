@@ -5,6 +5,12 @@
       "description": "Visão de Jogo Logo",
       "imageUrl": "https://i.imgur.com/iY4YsxL.png",
       "imageHint": "logo"
+    },
+    {
+      "id": "prizeImage",
+      "description": "Imagem do prêmio da rifa",
+      "imageUrl": "https://i.imgur.com/v1k2A2y.png",
+      "imageHint": "prize money"
     }
   ]
 }
