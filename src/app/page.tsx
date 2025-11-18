@@ -281,7 +281,7 @@ export default function Home() {
           </p>
         </header>
 
-        <section className="w-full animate-fade-in my-8 rounded-2xl border-2 border-primary/30 p-4 md:p-8 relative bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.9)_70%)] animate-glow" style={{ animationDelay: '0.8s' }}>
+        <section className="w-full animate-fade-in my-8 rounded-2xl border-2 border-primary/30 p-4 md:p-8 relative bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.9)_70%)] animate-glow" style={{ animationDelay: '0s' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
                   <h2 className="font-headline text-4xl md:text-5xl text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.8)] [text-shadow:0_0_10px_hsl(var(--primary)/0.5)]">
@@ -448,7 +448,6 @@ export default function Home() {
       )}
     </div>
   );
-
-    
+}
 
     
