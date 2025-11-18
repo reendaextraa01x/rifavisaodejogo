@@ -272,7 +272,7 @@ export default function Home() {
       <main className="flex flex-col items-center w-full max-w-4xl px-4 py-8 space-y-12 md:space-y-16">
         
         <header className="flex flex-col items-center text-center space-y-4 animate-fade-in">
-          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={60} height={60} className="md:w-16 md:h-16 w-14 h-14" data-ai-hint="logo" />
+          <Image src={ImagePlaceholders.find(p => p.id === 'logo')?.imageUrl || ''} alt="Visão de Jogo Logo" width={50} height={50} className="md:w-14 md:h-14 w-12 h-12" data-ai-hint="logo" />
           <h1 className="font-headline text-5xl md:text-7xl text-center tracking-wider text-primary drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
             RIFA VISÃO DE JOGO
           </h1>
@@ -297,13 +297,19 @@ export default function Home() {
         </section>
         
         <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
+                 <h2 className="font-headline text-4xl md:text-5xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                    O PRÊMIO QUE VAI MUDAR SEU JOGO
+                </h2>
+                <p className="text-lg text-gray-300 max-w-md">
+                    Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
+                </p>
                 <Image 
                     src={ImagePlaceholders.find(p => p.id === 'prizeImage')?.imageUrl || ''}
                     alt="Prêmio da Rifa"
                     width={500}
                     height={500}
-                    className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square"
+                    className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square mt-4"
                     data-ai-hint="prize money"
                 />
             </div>
