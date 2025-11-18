@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from "react";
@@ -59,7 +60,7 @@ export function MyTickets({ userId }: MyTicketsProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-wrap items-center justify-center gap-2">
-        {sortedTickets.map((ticket) => (
+        {sortedTickets.map((ticket: RaffleTicket) => (
           <div
             key={ticket.id}
             className="flex items-center justify-center bg-primary text-primary-foreground font-bold w-16 h-16 rounded-full text-xl shadow-lg transform transition-transform hover:scale-110"
