@@ -73,8 +73,8 @@ export default function Home() {
         soldNumbersSet: new Set(),
       };
     }
-    const sold = tickets.filter(t => t.isSold);
-    const soldNumbers = new Set(sold.map(t => t.ticketNumber));
+    const sold = tickets.filter((t: RaffleTicket) => t.isSold);
+    const soldNumbers = new Set(sold.map((t: RaffleTicket) => t.ticketNumber));
     return {
       soldCount: sold.length,
       availableCount: totalNumbers - sold.length,
@@ -449,5 +449,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
