@@ -301,7 +301,7 @@ export default function Home() {
                  <h2 className="font-headline text-4xl md:text-5xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                     O PRÊMIO QUE VAI MUDAR SEU JOGO
                 </h2>
-                <p className="text-lg text-gray-300 max-w-md">
+                <p className="text-lg text-gray-300 max-w-md drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                     Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
                 </p>
                 <Image 
