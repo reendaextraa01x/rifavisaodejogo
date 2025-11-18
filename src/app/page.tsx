@@ -281,21 +281,6 @@ export default function Home() {
           </p>
         </header>
 
-        <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <section className="relative w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 font-headline tracking-wider">
-              Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-2xl md:text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
-            </h2>
-            <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
-            <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
-          </section>
-        </div>
-
-
-        <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <SlothAnalysis tickets={tickets || []} />
-        </section>
-        
         <section className="w-full animate-fade-in my-8 rounded-2xl border-2 border-primary/30 p-4 md:p-8 relative bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.6)_0%,_rgba(0,0,0,0.9)_70%)] animate-glow" style={{ animationDelay: '0.8s' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
@@ -371,7 +356,21 @@ export default function Home() {
           </div>
         </section>
 
+        <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <section className="relative w-full text-center p-6 bg-card/30 rounded-xl border border-border backdrop-blur-sm shadow-lg shadow-black/20">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 font-headline tracking-wider">
+              Corra! Restam apenas <span className="text-primary font-headline tracking-wider text-2xl md:text-3xl">{ticketsLoading ? '...' : availableCount}</span> números!
+            </h2>
+            <Progress value={percentageSold} className="w-full h-4 bg-muted border border-primary/20" />
+            <p className="mt-2 text-sm text-muted-foreground">{soldCount} de {totalNumbers} vendidos ({percentageSold.toFixed(2)}%)</p>
+          </section>
+        </div>
 
+
+        <section className="w-full animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <SlothAnalysis tickets={tickets || []} />
+        </section>
+        
         <section className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <Collapsible open={isTicketsOpen} onOpenChange={setIsTicketsOpen} className="rounded-lg border-2 border-primary/50 animate-glow p-1">
             <CollapsibleTrigger asChild>
