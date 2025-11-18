@@ -5,8 +5,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Sparkles, Loader } from 'lucide-react';
-import { SlothMascot } from '../icons/sloth-mascot';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 type RaffleTicket = {
     id: string;
@@ -63,7 +63,14 @@ export function SlothAnalysis({ tickets }: SlothAnalysisProps) {
                             <div className="absolute w-24 h-24 rounded-full bg-primary/30 animate-ping delay-400"></div>
                         </div>
                     )}
-                    <SlothMascot isAnalyzing={isAnalyzing} className={cn("transition-all duration-500", isAnalyzing && "animate-pulse" )} />
+                    <Image 
+                      src="https://i.imgur.com/z87Zmld.png" 
+                      alt="Mascote Preguiça" 
+                      width={160} 
+                      height={160} 
+                      className={cn("transition-all duration-500", isAnalyzing && "animate-pulse" )}
+                      data-ai-hint="mascot sloth"
+                    />
                 </div>
 
                 {luckyNumber !== null ? (
