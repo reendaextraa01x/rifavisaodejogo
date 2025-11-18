@@ -301,9 +301,6 @@ export default function Home() {
                  <h2 className="font-headline text-4xl md:text-5xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                     O PRÊMIO QUE VAI MUDAR SEU JOGO
                 </h2>
-                <p className="text-lg text-gray-300 max-w-md drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                    Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
-                </p>
                 <Image 
                     src={ImagePlaceholders.find(p => p.id === 'prizeImage')?.imageUrl || ''}
                     alt="Prêmio da Rifa"
@@ -312,6 +309,9 @@ export default function Home() {
                     className="rounded-2xl shadow-2xl border-2 border-primary/30 object-cover aspect-square mt-4"
                     data-ai-hint="prize money"
                 />
+                <p className="text-lg text-gray-300 max-w-md drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pt-4">
+                    Imagine R$2.500 caindo no seu PIX e uma camisa oficial, autografada, do seu time do coração. Com apenas um número, essa pode ser a sua realidade.
+                </p>
             </div>
             <div className="max-w-md mx-auto bg-card/50 border border-primary/30 rounded-2xl shadow-lg p-6 backdrop-blur-sm animate-glow">
                 <div className="space-y-6">
