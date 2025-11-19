@@ -30,6 +30,7 @@ import { MyTickets } from "@/components/raffle/my-tickets";
 import { SlothAnalysis } from "@/components/raffle/sloth-analysis";
 import { ImagePlaceholders } from "@/lib/placeholder-images";
 import { BonusNumberClaim } from "@/components/raffle/bonus-number";
+import { User } from "firebase/auth";
 
 type RaffleTicket = {
   id: string;
@@ -124,15 +125,15 @@ export default function Home() {
     setIsProcessing(true);
 
     try {
-      let currentUser = user;
-      if (!currentUser && !isUserLoading) {
-        initiateAnonymousSignIn(auth);
-        toast({
-          title: "Aguardando autenticação...",
-          description: "Por favor, clique em 'Confirmar Pagamento' novamente.",
-        });
-        setIsProcessing(false);
-        return;
+      let currentUser: User | null = user;
+      
+      if (!currentUser && auth) {
+          toast({
+              title: "Autenticando...",
+              description: "Estamos criando uma sessão segura para você.",
+          });
+          const userCredential = await initiateAnonymousSignIn(auth);
+          currentUser = userCredential.user;
       }
       
       if (!currentUser) {
